@@ -1,16 +1,20 @@
 package com.example.appsectorsalud
 
-import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
-class MainActivity : AppCompatActivity() {
+class CitaActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        startActivity(Intent(this, LoginActivity::class.java))
-        finish()
+        setContentView(R.layout.activity_cita)
+
+        findViewById<Button>(R.id.btnSolicitarCita).setOnClickListener {
+            Toast.makeText(this, "Cita solicitada con el Dr. Pérez", Toast.LENGTH_LONG).show()
+        }
     }
 }
