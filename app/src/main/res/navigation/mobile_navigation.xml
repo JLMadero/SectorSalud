@@ -7,15 +7,15 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.example.appsectorsalud.ui.home.HomeFragment"
+        android:name="com.example.appsectorsalud.ui.expedientes.ExpedientesFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_expedientes" />
 
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="com.example.appsectorsalud.ui.dashboard.DashboardFragment"
+        android:name="com.example.appsectorsalud.ui.citas.CitasFragment"
         android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_citas" />
 
     <fragment
         android:id="@+id/navigation_notifications"
