@@ -12,7 +12,7 @@ public class Paciente {
     private String curp;
 
     public String getId() {
-        return id;
+        return id + 0;
     }
 
     public void setId(String id) {
