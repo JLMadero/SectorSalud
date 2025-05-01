@@ -13,9 +13,6 @@ public class ApiClient {
     HttpClient client = HttpClient.newHttpClient();
     private String url="https://pruebaapi-sv1q.onrender.com/api/expedientes";
     
-    
-   
-    
     public String getExpedientes() throws IOException, InterruptedException{
         HttpRequest request = HttpRequest.newBuilder()
             .uri(URI.create(url))
