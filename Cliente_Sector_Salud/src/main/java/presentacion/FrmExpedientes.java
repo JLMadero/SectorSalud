@@ -1,22 +1,7 @@
 package presentacion;
 
 import com.mycompany.backend.ApiClient;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.List;
-import com.mycompany.backend.Expediente;
-import javax.swing.DefaultCellEditor;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -305,7 +290,6 @@ public class FrmExpedientes extends javax.swing.JFrame {
 
         } catch (Exception e) {
             System.err.println("Error al cargar expedientes: " + e.getMessage());
-            e.printStackTrace();
         }
 
         tablaExpedientes.setModel(modelo);
