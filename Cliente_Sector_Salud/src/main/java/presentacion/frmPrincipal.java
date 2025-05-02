@@ -2,15 +2,17 @@ package presentacion;
 
 /**
  *
+ * Clase que extiende de Java swing para representar graficamente el menu principal
+ * 
  * @author Alejandro Gómez Vega 247313
- * @author Jesus Francisco Tapia Maldonado 24****
+ * @author Jesus Francisco Tapia Maldonado 245136
  * @author Jose Luis Madero Lopez 244903
  * @author Adriana Guitiérrez Robles 235633
  * @author Diego Alcantar Acosta 247122
  */
-public class frmPrincipal extends javax.swing.JFrame {
+public class FrmPrincipal extends javax.swing.JFrame {
 
-    public frmPrincipal() {
+    public FrmPrincipal() {
         initComponents();
     }
 
@@ -70,10 +72,20 @@ public class frmPrincipal extends javax.swing.JFrame {
         btnAgendaCitas.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         btnAgendaCitas.setText("Agenda de Citas");
         btnAgendaCitas.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnAgendaCitas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgendaCitasActionPerformed(evt);
+            }
+        });
 
         btnExpedientes.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         btnExpedientes.setText("Expedientes");
         btnExpedientes.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnExpedientes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExpedientesActionPerformed(evt);
+            }
+        });
 
         btnCerrarSesion.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         btnCerrarSesion.setText("Cerrar Sesión");
@@ -335,13 +347,17 @@ public class frmPrincipal extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new frmPrincipal().setVisible(true);
-            }
-        });
-    }
+    private void btnExpedientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExpedientesActionPerformed
+        FrmExpedientes frmExpedientes = new FrmExpedientes();
+        frmExpedientes.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnExpedientesActionPerformed
+
+    private void btnAgendaCitasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgendaCitasActionPerformed
+        FrmAgendaCitas frmAgendaCitas = new FrmAgendaCitas();
+        frmAgendaCitas.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnAgendaCitasActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgendaCitas;

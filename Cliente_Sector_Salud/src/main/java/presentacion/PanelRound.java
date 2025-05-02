@@ -11,7 +11,13 @@ import javax.swing.JPanel;
 
 /**
  *
- * @author adriana
+ * Clase que representa el oanel redondeado
+ * 
+ * @author Alejandro Gómez Vega 247313
+ * @author Jesus Francisco Tapia Maldonado 245136
+ * @author Jose Luis Madero Lopez 244903
+ * @author Adriana Guitiérrez Robles 235633
+ * @author Diego Alcantar Acosta 247122
  */
 
 public class PanelRound extends JPanel{
