@@ -9,15 +9,10 @@ import retrofit2.http.Query
 
 interface ApiService {
 
-    @POST("api/citas/agendar")
-    fun agendarCita(@Body cita: CitaRequest): Call<Void>
+    @GET("api/expedientes")
+    fun getExpedientes(): Call<List<Expediente>>
 
     @GET("api/expedientes/{pacienteId}")
-    fun getExpediente(@Path("pacienteId") pacienteId: String): Call<Expediente>
+    fun getExpedientePorId(@Path("pacienteId") pacienteId: String): Call<Expediente>
 
-    @POST("api/expedientes/{pacienteId}/autorizar")
-    fun autorizarAcceso(
-        @Path("pacienteId") pacienteId: String,
-        @Query("doctorId") doctorId: String
-    ): Call<Void>
 }
