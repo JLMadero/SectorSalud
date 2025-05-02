@@ -1,4 +1,4 @@
-package com.mycompany.backend;
+package backend;
 
 /**
  *

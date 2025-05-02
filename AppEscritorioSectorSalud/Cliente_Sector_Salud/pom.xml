@@ -12,14 +12,14 @@
             <version>RELEASE220</version>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>Backend</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20240303</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>Backend_Sector_Salud</artifactId>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
     <properties>

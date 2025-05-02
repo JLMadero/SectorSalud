@@ -1,6 +1,6 @@
 package presentacion;
 
-import com.mycompany.backend.ApiClient;
+import backend.ApiClient;
 import javax.swing.table.DefaultTableModel;
 import org.json.JSONArray;
 import org.json.JSONObject;
