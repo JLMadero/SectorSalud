@@ -1,18 +1,28 @@
 package com.example.appsectorsalud
 
 import android.os.Bundle
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
-import androidx.navigation.ui.setupWithNavController
-import com.example.appsectorsalud.databinding.ActivityExpedienteBinding
-import android.util.Log
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import android.util.Log
+import android.view.ViewGroup
+import android.widget.TextView as AndroidTextView
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import com.example.appsectorsalud.databinding.ActivityExpedienteBinding
 
 class ExpedienteActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityExpedienteBinding
+    private lateinit var patientIdTextView: TextView
+    private lateinit var nombreTextView: TextView
+    private lateinit var creationDateTextView: TextView
+    private lateinit var alergiasList: RecyclerView
+    private lateinit var notasList: RecyclerView
+    private val pacienteId = "12347"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,16 +30,27 @@ class ExpedienteActivity : AppCompatActivity() {
         binding = ActivityExpedienteBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val navController = findNavController(R.id.nav_host_fragment_activity_expediente)
-        binding.navView.setupWithNavController(navController)
+        patientIdTextView = findViewById(R.id.patientId)
+        nombreTextView = findViewById(R.id.nombre)
+        creationDateTextView = findViewById(R.id.creationDate)
+        alergiasList = findViewById(R.id.alergiasList)
+        notasList = findViewById(R.id.notasList)
 
-        val pacienteId = "12347"
+        alergiasList.layoutManager = LinearLayoutManager(this)
+        notasList.layoutManager = LinearLayoutManager(this)
 
         ApiClient.instance.getExpedientePorId(pacienteId).enqueue(object : Callback<Expediente> {
             override fun onResponse(call: Call<Expediente>, response: Response<Expediente>) {
                 if (response.isSuccessful) {
                     val expediente = response.body()
-                    Log.d("API_RESPONSE", "Expediente: $expediente")
+                    expediente?.let {
+                        patientIdTextView.text = it.pacienteId
+                        nombreTextView.text = "Nombre no disponible"
+                        creationDateTextView.text = "Fecha no disponible"
+
+                        alergiasList.adapter = SimpleListAdapter(it.alergias ?: listOf("Sin datos"))
+                        notasList.adapter = SimpleListAdapter(listOf(it.notasAdicionales ?: "Sin notas"))
+                    }
                 } else {
                     Log.e("API_ERROR", "Código de error: ${response.code()}")
                 }
@@ -39,35 +60,25 @@ class ExpedienteActivity : AppCompatActivity() {
                 Log.e("API_FAILURE", "Error: ${t.message}")
             }
         })
-
-        ApiClient.instance.getExpedientes().enqueue(object : Callback<List<Expediente>> {
-            override fun onResponse(call: Call<List<Expediente>>, response: Response<List<Expediente>>) {
-                if (response.isSuccessful) {
-                    val expedientes = response.body()
-                    expedientes?.forEach { expediente ->
-                        Log.d("API_EXPEDIENTES", """
-                    ID: ${expediente.id}
-                    Paciente ID: ${expediente.pacienteId}
-                    Alergias: ${expediente.alergias.joinToString(", ")}
-                    Notas: ${expediente.notasAdicionales}
-                """.trimIndent())
-                    }
-                } else {
-                    Log.e("API_ERROR", "Código de error: ${response.code()}")
-                }
-            }
-
-            override fun onFailure(call: Call<List<Expediente>>, t: Throwable) {
-                Log.e("API_FAILURE", "Error: ${t.message}")
-            }
-        })
     }
+    
+    class SimpleListAdapter(private val items: List<String>) :
+        RecyclerView.Adapter<SimpleListAdapter.ViewHolder>() {
 
+        class ViewHolder(val view: AndroidTextView) : RecyclerView.ViewHolder(view)
 
-    override fun onBackPressed() {
-        val navController = findNavController(R.id.nav_host_fragment_activity_expediente)
-        if (!navController.popBackStack()) {
-            super.onBackPressed()
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            val textView = AndroidTextView(parent.context).apply {
+                setPadding(16, 16, 16, 16)
+                textSize = 14f
+            }
+            return ViewHolder(textView)
         }
+
+        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+            holder.view.text = items[position]
+        }
+
+        override fun getItemCount(): Int = items.size
     }
 }
