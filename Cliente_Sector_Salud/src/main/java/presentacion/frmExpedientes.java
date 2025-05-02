@@ -1,10 +1,13 @@
 package presentacion;
 
+import com.mycompany.backend.ApiClient;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.List;
+import com.mycompany.backend.Expediente;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -14,6 +17,8 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  *
@@ -21,9 +26,8 @@ import javax.swing.table.TableCellRenderer;
  */
 public class frmExpedientes extends javax.swing.JFrame {
 
-    /**
-     * Creates new form frmExpedientes
-     */
+    ApiClient apiClient = new ApiClient();
+
     public frmExpedientes() {
         initComponents();
         llenarTabla();
@@ -221,10 +225,11 @@ public class frmExpedientes extends javax.swing.JFrame {
             panelRound1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelRound1Layout.createSequentialGroup()
                 .addGap(12, 12, 12)
-                .addGroup(panelRound1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtBuscarExpediente, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(panelRound1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(panelRound1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtBuscarExpediente, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -256,7 +261,7 @@ public class frmExpedientes extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtBuscarExpedienteKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarExpedienteKeyTyped
-        
+
     }//GEN-LAST:event_txtBuscarExpedienteKeyTyped
 
     private void txtBuscarExpedienteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtBuscarExpedienteMouseClicked
@@ -268,68 +273,49 @@ public class frmExpedientes extends javax.swing.JFrame {
 
     private void llenarTabla() {
         DefaultTableModel modelo = new DefaultTableModel(
-                new Object[][]{}, 
-                new String[]{"ID", "Nombre", "Edad", "Última Consulta", "Acciones"}
+                new Object[][]{},
+                new String[]{"ID", "Paciente ID", "Alergias", "Notas adicionales"}
         ) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return column == 4;// Solo la columna de acciones es editable
+                return false;
             }
         };
 
-        tablaExpedientes.setModel(modelo);
-
-        tablaExpedientes.setRowHeight(40);
-        tablaExpedientes.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        tablaExpedientes.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 14));
-        tablaExpedientes.getTableHeader().setBackground(new Color(157, 36, 73));
-        tablaExpedientes.setSelectionBackground(new Color(232, 232, 232));
-        tablaExpedientes.setGridColor(new Color(220, 220, 220));
-        tablaExpedientes.setShowVerticalLines(true);
-        tablaExpedientes.setShowHorizontalLines(true);
-        
-        DefaultTableCellRenderer centradorRenderer = new DefaultTableCellRenderer();
-        centradorRenderer.setHorizontalAlignment(JLabel.CENTER);
-        tablaExpedientes.getColumnModel().getColumn(0).setCellRenderer(centradorRenderer); // ID
-        tablaExpedientes.getColumnModel().getColumn(2).setCellRenderer(centradorRenderer); // Edad
-        tablaExpedientes.getColumnModel().getColumn(3).setCellRenderer(centradorRenderer); // Última Consulta
-
-        tablaExpedientes.getColumnModel().getColumn(0).setPreferredWidth(50); // ID
-        tablaExpedientes.getColumnModel().getColumn(1).setPreferredWidth(200); // Nombre
-        tablaExpedientes.getColumnModel().getColumn(2).setPreferredWidth(50); // Edad
-        tablaExpedientes.getColumnModel().getColumn(3).setPreferredWidth(120); // Última Consulta
-        tablaExpedientes.getColumnModel().getColumn(4).setPreferredWidth(150); // Acciones
-
-    }
-    
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
         try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(frmExpedientes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(frmExpedientes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(frmExpedientes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(frmExpedientes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+            String jsonResponse = apiClient.getExpedientes();
+            JSONArray expedientesArray = new JSONArray(jsonResponse);
 
-        /* Create and display the form */
+            for (int i = 0; i < expedientesArray.length(); i++) {
+                JSONObject expediente = expedientesArray.getJSONObject(i);
+
+                String id = expediente.getString("id");
+                String pacienteId = expediente.getString("pacienteId");
+
+                JSONArray alergiasArray = expediente.getJSONArray("alergias");
+                StringBuilder alergiasStr = new StringBuilder();
+                for (int j = 0; j < alergiasArray.length(); j++) {
+                    alergiasStr.append(alergiasArray.getString(j));
+                    if (j < alergiasArray.length() - 1) {
+                        alergiasStr.append(", ");
+                    }
+                }
+
+                String notas = expediente.optString("notasAdicionales", "");
+
+                modelo.addRow(new Object[]{id, pacienteId, alergiasStr.toString(), notas});
+            }
+
+        } catch (Exception e) {
+            System.err.println("Error al cargar expedientes: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        tablaExpedientes.setModel(modelo);
+        tablaExpedientes.setRowHeight(30);
+    }
+
+    public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new frmExpedientes().setVisible(true);
