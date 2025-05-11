@@ -1,0 +1,50 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package model;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+
+
+@Entity
+public class PacientesAsignados {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String pacienteUuid;
+
+    private String profesionalCedula;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getPacienteUuid() {
+        return pacienteUuid;
+    }
+
+    public void setPacienteUuid(String pacienteUuid) {
+        this.pacienteUuid = pacienteUuid;
+    }
+
+    public String getProfesionalCedula() {
+        return profesionalCedula;
+    }
+
+    public void setProfesionalCedula(String profesionalCedula) {
+        this.profesionalCedula = profesionalCedula;
+    }
+    
+    
+}
