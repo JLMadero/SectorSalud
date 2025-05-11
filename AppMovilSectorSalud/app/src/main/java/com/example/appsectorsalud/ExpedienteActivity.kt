@@ -59,6 +59,11 @@ class ExpedienteActivity : AppCompatActivity() {
             citaActivityResultLauncher.launch(intent)
         }
 
+        binding.btnNotificaciones.setOnClickListener{
+            val intent = Intent(this, NotificacionesActivity::class.java)
+            startActivity(intent)
+        }
+
         // Initial data load
         loadExpediente()
     }

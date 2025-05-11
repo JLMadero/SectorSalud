@@ -46,7 +46,7 @@ dependencies {
     implementation(libs.androidx.runner)
     implementation(libs.androidx.runner)
     implementation(libs.androidx.runner)
-
+    implementation("com.google.firebase:firebase-messaging:23.4.1")
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.3")
     implementation("com.google.android.gms:play-services-base:18.7.0")
     implementation("com.google.android.gms:play-services-tasks:18.3.0")
