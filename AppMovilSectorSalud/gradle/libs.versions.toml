@@ -1,8 +1,10 @@
 [versions]
 agp = "8.8.0"
+amqpClient = "5.16.0"
 converterGson = "2.9.0"
+desugar_jdk_libs = "2.1.5"
 firebaseBom = "33.13.0"
-kotlin = "1.9.24"
+kotlin = "2.1.0"
 coreKtx = "1.16.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
@@ -20,10 +22,13 @@ googleGmsGoogleServices = "4.4.2"
 firebaseDatabase = "21.0.0"
 playServicesBase = "18.7.0"
 retrofit = "2.9.0"
+runner = "1.6.1"
 
 [libraries]
+amqp-client = { module = "com.rabbitmq:amqp-client", version.ref = "amqpClient" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
+desugar_jdk_libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar_jdk_libs" }
 firebase-auth-ktx = { module = "com.google.firebase:firebase-auth-ktx" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 firebase-firestore-ktx = { module = "com.google.firebase:firebase-firestore-ktx" }
@@ -42,6 +47,7 @@ androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation
 firebase-database = { group = "com.google.firebase", name = "firebase-database", version.ref = "firebaseDatabase" }
 play-services-base = { module = "com.google.android.gms:play-services-base", version.ref = "playServicesBase" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+androidx-runner = { group = "androidx.test", name = "runner", version.ref = "runner" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

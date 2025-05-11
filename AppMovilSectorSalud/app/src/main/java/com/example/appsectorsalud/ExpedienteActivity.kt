@@ -1,5 +1,6 @@
 package com.example.appsectorsalud
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -10,6 +11,8 @@ import retrofit2.Callback
 import retrofit2.Response
 import android.util.Log
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import android.widget.TextView as AndroidTextView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.appsectorsalud.databinding.ActivityExpedienteBinding
@@ -23,6 +26,9 @@ class ExpedienteActivity : AppCompatActivity() {
     private lateinit var alergiasList: RecyclerView
     private lateinit var notasList: RecyclerView
     private val pacienteId = "12347"
+
+    // Define the ActivityResultLauncher to handle the result from CitaActivity
+    private lateinit var citaActivityResultLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +45,25 @@ class ExpedienteActivity : AppCompatActivity() {
         alergiasList.layoutManager = LinearLayoutManager(this)
         notasList.layoutManager = LinearLayoutManager(this)
 
+        // Set up the ActivityResultLauncher to handle the result
+        citaActivityResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                // If the result is OK, reload the data
+                loadExpediente()
+            }
+        }
+
+        // Set up the button to open CitaActivity
+        binding.btnCitas.setOnClickListener {
+            val intent = Intent(this, CitaActivity::class.java)
+            citaActivityResultLauncher.launch(intent)
+        }
+
+        // Initial data load
+        loadExpediente()
+    }
+
+    private fun loadExpediente() {
         ApiClient.instance.getExpedientePorId(pacienteId).enqueue(object : Callback<Expediente> {
             override fun onResponse(call: Call<Expediente>, response: Response<Expediente>) {
                 if (response.isSuccessful) {
@@ -61,14 +86,14 @@ class ExpedienteActivity : AppCompatActivity() {
             }
         })
     }
-    
+
     class SimpleListAdapter(private val items: List<String>) :
         RecyclerView.Adapter<SimpleListAdapter.ViewHolder>() {
 
-        class ViewHolder(val view: AndroidTextView) : RecyclerView.ViewHolder(view)
+        class ViewHolder(val view: TextView) : RecyclerView.ViewHolder(view)
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val textView = AndroidTextView(parent.context).apply {
+            val textView = TextView(parent.context).apply {
                 setPadding(16, 16, 16, 16)
                 textSize = 14f
             }

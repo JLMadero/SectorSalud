@@ -30,6 +30,8 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
+        isCoreLibraryDesugaringEnabled = true
+
     }
     kotlinOptions {
         jvmTarget = "11"
@@ -40,6 +42,15 @@ android {
 }
 
 dependencies {
+    implementation (libs.amqp.client)
+    implementation(libs.androidx.runner)
+    implementation(libs.androidx.runner)
+    implementation(libs.androidx.runner)
+
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.3")
+    implementation("com.google.android.gms:play-services-base:18.7.0")
+    implementation("com.google.android.gms:play-services-tasks:18.3.0")
+    implementation("com.google.android.gms:play-services-basement:18.7.0")
     implementation (libs.play.services.base)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

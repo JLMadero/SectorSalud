@@ -1,64 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
     android:orientation="vertical"
-    android:padding="16dp"
-    android:background="@android:color/white">
+    android:padding="16dp">
 
-    <!-- Campos de entrada -->
     <EditText
-        android:layout_marginTop="70dp"
         android:id="@+id/editTextFecha"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Fecha de la cita (dd/mm/yyyy)"
-        android:inputType="date"
+        android:layout_marginBottom="12dp"
         android:background="@drawable/edit_text_background"
+        android:clickable="true"
+        android:focusable="false"
+        android:hint="Fecha de la cita (dd/mm/yyyy)"
+        android:layout_marginTop="70dp"
         android:padding="12dp"
-        android:textSize="16sp"
-        android:layout_marginBottom="12dp" />
+        android:textSize="16sp" />
 
     <EditText
         android:id="@+id/editTextIdDoctor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/edit_text_background"
         android:hint="ID del Doctor"
         android:inputType="number"
-        android:background="@drawable/edit_text_background"
         android:padding="12dp"
-        android:textSize="16sp"
-        android:layout_marginBottom="12dp" />
+        android:textSize="16sp" />
 
     <EditText
-        android:id="@+id/editTextIdPaciente"
+        android:id="@+id/editTextEspecialidad"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="ID del Paciente"
-        android:inputType="number"
+        android:layout_marginBottom="16dp"
         android:background="@drawable/edit_text_background"
+        android:hint="Especialidad"
+        android:inputType="text"
         android:padding="12dp"
-        android:textSize="16sp"
-        android:layout_marginBottom="16dp" />
-
-    <!-- Fragmento de navegación -->
-    <fragment
-        android:id="@+id/nav_host_fragment_activity_cita"
-        android:name="androidx.navigation.fragment.NavHostFragment"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        app:defaultNavHost="true"
-        app:navGraph="@navigation/mobile_navigation2" />
-
-    <!-- Menú de navegación abajo -->
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/nav_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?android:attr/windowBackground"
-        app:menu="@menu/bottom_nav_menu" />
+        android:textSize="16sp" />
 
 </LinearLayout>

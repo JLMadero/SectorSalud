@@ -17,17 +17,7 @@ class NotificacionesActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityNotificacionesBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
-        val navController = findNavController(R.id.nav_host_fragment_activity_notificaciones)
-        binding.navView.setupWithNavController(navController)
     }
 
-    override fun onBackPressed() {
-        val navController = findNavController(R.id.nav_host_fragment_activity_notificaciones)
-        if (!navController.popBackStack()) {
-            super.onBackPressed()
-        }
     }
-}
