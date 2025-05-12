@@ -23,7 +23,7 @@
         android:id="@+id/et_nombres"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:hint="nombres"
+        android:hint="Nombre"
         android:inputType="textPersonName"
         android:layout_marginBottom="20dp"
         />
@@ -32,7 +32,7 @@
         android:id="@+id/et_apellido_paterno"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:hint="apellido paterno"
+        android:hint="Apellido Paterno"
         android:inputType="textPersonName"
         android:layout_marginBottom="20dp"
         />
@@ -40,7 +40,7 @@
         android:id="@+id/et_apellido_materno"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:hint="apellidomaterno"
+        android:hint="Apellido Materno"
         android:inputType="textPersonName"
         android:layout_marginBottom="20dp"
         />
@@ -48,7 +48,7 @@
         android:id="@+id/et_curp"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:hint="curp"
+        android:hint="CURP"
         android:inputType="text"
         android:layout_marginBottom="20dp"
         />
@@ -56,13 +56,13 @@
         android:id="@+id/et_email"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:hint="e-mail"
+        android:hint="Correo Electronico"
         android:inputType="textEmailAddress"
         android:layout_marginBottom="20dp"
         />
     <EditText
         android:id="@+id/et_fecha_nacimiento"
-        android:hint="Fecha de nacimiento"
+        android:hint="Fecha de Nacimiento"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:inputType="date"
@@ -76,16 +76,19 @@
         android:id="@+id/et_password"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:hint="contraseña"
+        android:hint="Contraseña"
         android:inputType="textPassword"
         android:layout_marginBottom="20dp"
         />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_registrarse"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="registrarse!"
+        android:textAllCaps="false"
+        android:padding="10dp"
+        android:background="@drawable/boton_redondito"
+        android:text="Registrarse"
         android:layout_gravity="center"
         />
 

@@ -12,6 +12,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 
 class RegistrarseActivity : AppCompatActivity() {
@@ -40,7 +41,7 @@ class RegistrarseActivity : AppCompatActivity() {
 
         val btn_sign_in = findViewById(R.id.btn_registrarse) as Button
 
-        et_fecha_nacimiento.setOnClickListener{
+        et_fecha_nacimiento.setOnClickListener {
             val datePicker = DatePickerFragment()
             datePicker.setOnDateSetListener { _, year, month, dayOfMonth ->
                 val fecha = String.format("%02d/%02d/%04d", dayOfMonth, month + 1, year)
@@ -59,12 +60,26 @@ class RegistrarseActivity : AppCompatActivity() {
             val password = et_password.text.toString()
 
             if (nombres.isBlank() || apellidoPaterno.isBlank() || apellidoMaterno.isBlank()
-                || curp.isBlank() || fechaNacimiento.isBlank() || email.isBlank() || password.isBlank()) {
-                Toast.makeText(this, "Todos los campos deben ser llenados", Toast.LENGTH_SHORT).show()
-            } else if (password.length <= 6) {
-                Toast.makeText(this, "La contraseña debe tener al menos 6 caracteres", Toast.LENGTH_SHORT).show()
+                || curp.isBlank() || fechaNacimiento.isBlank() || email.isBlank() || password.isBlank()
+            ) {
+                Toast.makeText(this, "Todos los campos deben ser llenados", Toast.LENGTH_SHORT)
+                    .show()
+            } else if (password.length < 6) {
+                Toast.makeText(
+                    this,
+                    "La contraseña debe tener al menos 6 caracteres",
+                    Toast.LENGTH_SHORT
+                ).show()
             } else {
-                signUp(nombres, apellidoPaterno, apellidoMaterno, curp, fechaNacimiento, email, password)
+                signUp(
+                    nombres,
+                    apellidoPaterno,
+                    apellidoMaterno,
+                    curp,
+                    fechaNacimiento,
+                    email,
+                    password
+                )
             }
         }
 
@@ -84,14 +99,14 @@ class RegistrarseActivity : AppCompatActivity() {
         email: String,
         password: String
     ) {
-        val db = FirebaseFirestore.getInstance()
+        val database = FirebaseDatabase.getInstance()
 
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     val user = auth.currentUser
 
-                    val usuario = hashMapOf(
+                    val usuario = mapOf(
                         "usuarioId" to user!!.uid,
                         "nombres" to nombres,
                         "apellidoPaterno" to apellidoPaterno,
@@ -101,21 +116,33 @@ class RegistrarseActivity : AppCompatActivity() {
                         "email" to email
                     )
 
-                    db.collection("Usuarios")
-                        .document(user.uid)
-                        .set(usuario)
+                    // Guardar en Realtime Database
+                    val reference = database.getReference("Usuarios")
+                    reference.child(user.uid).setValue(usuario)
                         .addOnSuccessListener {
-                            Toast.makeText(this, "Usuario registrado correctamente", Toast.LENGTH_SHORT).show()
-                            val intent = Intent(this, LoginActivity::class.java)
+                            Toast.makeText(
+                                this,
+                                "Usuario registrado correctamente",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            val intent = Intent(this, ExpedienteActivity::class.java)
                             startActivity(intent)
                             finish()
                         }
-                        .addOnFailureListener { e ->
-                            Toast.makeText(this, "Error al guardar en Firestore", Toast.LENGTH_SHORT).show()
+                        .addOnFailureListener {
+                            Toast.makeText(
+                                this,
+                                "Error al guardar en Realtime Database",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
 
                 } else {
-                    Toast.makeText(this, "El registro falló: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this,
+                        "El registro falló: ${task.exception?.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
     }
