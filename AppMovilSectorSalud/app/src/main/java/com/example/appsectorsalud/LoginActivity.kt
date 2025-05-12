@@ -23,27 +23,13 @@ class LoginActivity : AppCompatActivity() {
             startActivity(Intent(this, ExpedienteActivity::class.java))
             finish()
         }
-    }
 
-    fun rabbitIniciarConsumo(){
-        RabbitMQConsumer.iniciarConsumo { mensaje ->
-            runOnUiThread {
-                val db = FirebaseFirestore.getInstance()
-                //igual esto tambien esta mal faltaria hacerlo bien xd
-                val data = hashMapOf(
-                    "mensaje" to mensaje,
-                    "timestamp" to FieldValue.serverTimestamp()
-                )
+        val btnSignIn = findViewById<Button>(R.id.btnSignIn)
 
-                db.collection("mensajes")
-                    .add(data)
-                    .addOnSuccessListener { docRef ->
-                        Log.d("Firestore", "Mensaje guardado con ID: ${docRef.id}")
-                    }
-                    .addOnFailureListener { e ->
-                        Log.e("Firestore", "Error al guardar mensaje", e)
-                    }
-            }
+        btnSignIn.setOnClickListener{
+            startActivity(Intent(this, RegistrarseActivity::class.java))
         }
     }
+
+
 }

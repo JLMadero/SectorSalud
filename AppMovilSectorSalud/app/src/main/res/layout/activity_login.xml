@@ -17,4 +17,10 @@
         android:text="Autenticarse con huella"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/btnSignIn"
+        android:text="Registrarse"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 </LinearLayout>
