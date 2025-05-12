@@ -23,6 +23,12 @@ class LoginActivity : AppCompatActivity() {
             startActivity(Intent(this, ExpedienteActivity::class.java))
             finish()
         }
+
+        val btnSignIn = findViewById<Button>(R.id.btnSignIn)
+
+        btnSignIn.setOnClickListener{
+            startActivity(Intent(this, RegistrarseActivity::class.java))
+        }
     }
 
     fun rabbitIniciarConsumo(){
