@@ -8,10 +8,14 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import java.io.Serializable;
 
-
+/**
+ *
+ * @author jl4ma
+ */
 @Entity
-public class MensajesRecibidos {
+public class MensajeRecibido {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -8,12 +8,15 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import java.io.Serializable;
 import java.util.Date;
 
-
-
+/**
+ *
+ * @author jl4ma
+ */
 @Entity
-public class PacientesAsignados {
+public class PacienteAsignado {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -56,8 +59,4 @@ public class PacientesAsignados {
     public void setFecha(Date fecha) {
         this.fecha = fecha;
     }
-    
-    
-    
-    
 }

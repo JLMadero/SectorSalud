@@ -6,8 +6,8 @@ package repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
-import model.PacientesAsignados;
+import model.PacienteAsignado;
 
-public interface PacientesAsignadosRepository extends JpaRepository<PacientesAsignados, Long> {
-    List<PacientesAsignados> findByProfesionalCedula(String cedula);
+public interface PacientesAsignadosRepository extends JpaRepository<PacienteAsignado, Long> {
+    List<PacienteAsignado> findByProfesionalCedula(String cedula);
 }

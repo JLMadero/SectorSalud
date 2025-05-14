@@ -4,6 +4,9 @@
 
 package com.mycompany.servicios;
 
+import fachada.Fachada;
+import fachada.IFachada;
+
 /**
  *
  * @author jl4ma
@@ -11,6 +14,10 @@ package com.mycompany.servicios;
 public class Servicios {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        
+        IFachada f = new Fachada();
+        f.insercion();
+        
+        System.out.println(f.iniciarSesion("244903"));
     }
 }
