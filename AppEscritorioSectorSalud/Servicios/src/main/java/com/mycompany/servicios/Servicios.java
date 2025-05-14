@@ -6,18 +6,25 @@ package com.mycompany.servicios;
 
 import fachada.Fachada;
 import fachada.IFachada;
+import fachada.MensajeRecibidoDTO;
+import java.util.List;
 
 /**
  *
  * @author jl4ma
  */
-public class Servicios {
+    public class Servicios {
 
-    public static void main(String[] args) {
-        
-        IFachada f = new Fachada();
-        f.insercion();
-        
-        System.out.println(f.iniciarSesion("244903"));
+        public static void main(String[] args) {
+
+            IFachada f = new Fachada();
+            f.insercion();
+
+            System.out.println(f.iniciarSesion("244903"));
+        List<MensajeRecibidoDTO> mensajes = f.obtenerMensajesPorCedula("12345");
+
+        for (MensajeRecibidoDTO mensaje : mensajes) {
+            System.out.println(mensaje.getContenido());
+        }
+        }
     }
-}

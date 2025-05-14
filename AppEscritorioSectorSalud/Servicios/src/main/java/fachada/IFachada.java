@@ -4,6 +4,8 @@
  */
 package fachada;
 
+import java.util.List;
+
 /**
  *
  * @author jl4ma
@@ -12,4 +14,5 @@ public interface IFachada {
     
     public void insercion();
     public boolean iniciarSesion(String cedula);
+    public List<MensajeRecibidoDTO> obtenerMensajesPorCedula(String cedula);
 }

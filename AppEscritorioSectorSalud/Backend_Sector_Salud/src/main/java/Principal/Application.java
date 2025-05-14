@@ -21,7 +21,8 @@ import service.RabbitMQSenderService;
 @SpringBootApplication
 @EntityScan("model")
 @EnableJpaRepositories(basePackages = "repository") 
-@ComponentScan(basePackages = "service") // Asegúrate de que el paquete 'service' esté siendo escaneado
+@ComponentScan(basePackages = {"controlador", "service", "repository"})
+ // Asegúrate de que el paquete 'service' esté siendo escaneado
 public class Application {
 
     public static void main(String[] args) {
@@ -31,13 +32,13 @@ public class Application {
    
 
     // Este método será ejecutado al iniciar la aplicación
-    @Bean
-    public CommandLineRunner demo(RabbitMQSenderService senderService) {
-        return (args) -> {
-            // Enviar un mensaje directamente desde el main para probar
-            senderService.enviarSolicitudExpediente("12345", "abcd-1234");
-            System.out.println("Mensaje enviado a la cola Cliente/Servidor");
-        };
-    }
+//    @Bean
+//    public CommandLineRunner demo(RabbitMQSenderService senderService) {
+//        return (args) -> {
+//            // Enviar un mensaje directamente desde el main para probar
+//            senderService.enviarSolicitudExpediente("12345", "abcd-1234");
+//            System.out.println("Mensaje enviado a la cola Cliente/Servidor");
+//        };
+//    }
     
 }
