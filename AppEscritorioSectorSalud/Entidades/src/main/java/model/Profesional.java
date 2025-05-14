@@ -4,17 +4,17 @@
  */
 package model;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
 
 /**
  *
  * @author jl4ma
  */
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 
 @Entity
-public class Profesionales {
+public class Profesional {
     @Id
     private String cedula;
     private String nombre;
@@ -34,6 +34,18 @@ public class Profesionales {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
+
+    public Profesional(String cedula, String nombre) {
+        this.cedula = cedula;
+        this.nombre = nombre;
+    }
+
+    public Profesional() {
+    }
+    
+    
     
     
 }
+    
+

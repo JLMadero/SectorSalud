@@ -9,8 +9,8 @@ package repository;
  * @author jl4ma
  */
 
-import model.MensajesRecibidos;
+import model.MensajeRecibido;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface MensajeRecibidoRepository extends JpaRepository<MensajesRecibidos, Long> {
+public interface MensajeRecibidoRepository extends JpaRepository<MensajeRecibido, Long> {
 }
