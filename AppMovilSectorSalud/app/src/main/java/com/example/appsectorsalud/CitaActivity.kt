@@ -11,7 +11,6 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.appsectorsalud.data.MensajeAgendar
-import com.example.appsectorsalud.data.Respuesta
 import com.example.appsectorsalud.databinding.ActivityCitaBinding
 import com.example.appsectorsalud.databinding.ActivityExpedienteBinding
 import com.google.firebase.auth.FirebaseAuth

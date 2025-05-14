@@ -12,8 +12,9 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ServerValue
 import org.json.JSONObject
+import java.text.SimpleDateFormat
+import java.util.*
 
 class IniciarSesion : AppCompatActivity() {
 
@@ -34,10 +35,8 @@ class IniciarSesion : AppCompatActivity() {
             insets
         }
 
-        // Inicializar Firebase Auth
         auth = FirebaseAuth.getInstance()
 
-        // Referencias a la UI
         etEmail = findViewById(R.id.et_email)
         etPassword = findViewById(R.id.et_password)
         btnIniciar = findViewById(R.id.btn_iniciar)
@@ -48,23 +47,53 @@ class IniciarSesion : AppCompatActivity() {
             val password = etPassword.text.toString().trim()
 
             if (email.isEmpty() || password.isEmpty()) {
-                Toast.makeText(this, "Por favor, completa todos los campos", Toast.LENGTH_SHORT)
-                    .show()
+                Toast.makeText(this, "Por favor, completa todos los campos", Toast.LENGTH_SHORT).show()
             } else {
                 auth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
-                            Toast.makeText(this, "Inicio de sesión exitoso", Toast.LENGTH_SHORT)
-                                .show()
-                            val intent = Intent(this, ExpedienteActivity::class.java)
-                            startActivity(intent)
-                            finish()
+                            val userId = auth.currentUser?.uid
+                            if (userId != null) {
+                                val dbRef = FirebaseDatabase.getInstance().getReference("Usuarios").child(userId)
+                                dbRef.get().addOnSuccessListener { snapshot ->
+                                    val fechaNacimientoStr = snapshot.child("fechaNacimiento").value?.toString()
+
+                                    if (fechaNacimientoStr != null) {
+                                        try {
+                                            val formato = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+                                            val fechaNacimiento = formato.parse(fechaNacimientoStr)
+
+                                            val hoy = Calendar.getInstance()
+                                            val nacimiento = Calendar.getInstance()
+                                            nacimiento.time = fechaNacimiento!!
+
+                                            var edad = hoy.get(Calendar.YEAR) - nacimiento.get(Calendar.YEAR)
+                                            if (hoy.get(Calendar.DAY_OF_YEAR) < nacimiento.get(Calendar.DAY_OF_YEAR)) {
+                                                edad--
+                                            }
+
+                                            if (edad >= 18) {
+                                                Toast.makeText(this, "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show()
+                                                startActivity(Intent(this, ExpedienteActivity::class.java))
+                                            } else {
+                                                Toast.makeText(this, "Menor de edad. Requiere verificación del tutor.", Toast.LENGTH_SHORT).show()
+                                                startActivity(Intent(this, HuellaTutor::class.java))
+                                            }
+                                            finish()
+
+                                        } catch (e: Exception) {
+                                            Log.e("Edad", "Error al analizar fecha de nacimiento", e)
+                                            Toast.makeText(this, "Error al leer fecha de nacimiento", Toast.LENGTH_LONG).show()
+                                        }
+                                    } else {
+                                        Toast.makeText(this, "No se encontró la fecha de nacimiento", Toast.LENGTH_LONG).show()
+                                    }
+                                }.addOnFailureListener {
+                                    Toast.makeText(this, "Error al obtener datos del usuario", Toast.LENGTH_LONG).show()
+                                }
+                            }
                         } else {
-                            Toast.makeText(
-                                this,
-                                "Error: ${task.exception?.message}",
-                                Toast.LENGTH_LONG
-                            ).show()
+                            Toast.makeText(this, "Error: ${task.exception?.message}", Toast.LENGTH_LONG).show()
                         }
                     }
             }

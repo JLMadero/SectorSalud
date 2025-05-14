@@ -13,9 +13,9 @@ import android.util.Log
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import android.widget.TextView as AndroidTextView
-import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import androidx.appcompat.widget.AppCompatButton
 import com.example.appsectorsalud.databinding.ActivityExpedienteBinding
+import com.example.appsectorsalud.utils.RadiografiasAdapter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 
@@ -40,6 +40,11 @@ class ExpedienteActivity : AppCompatActivity() {
 
         binding = ActivityExpedienteBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val btnCerrarSesion = findViewById<AppCompatButton>(R.id.btnCerrarSesion)
+        btnCerrarSesion.setOnClickListener {
+            cerrarSesion()
+        }
 
         patientIdTextView = findViewById(R.id.patientId)
         nombreTextView = findViewById(R.id.nombre)
@@ -110,9 +115,13 @@ class ExpedienteActivity : AppCompatActivity() {
                             val soloFecha = rawDate.split("T").firstOrNull() ?: rawDate
                             creationDateTextView.text = soloFecha
 
-
                             alergiasList.adapter = SimpleListAdapter(it.alergias ?: listOf("Sin datos"))
-                            radiografiasList.adapter = SimpleListAdapter(it.radiografias ?: listOf("Sin datos"))
+                            radiografiasList.adapter = if (!it.radiografias.isNullOrEmpty()) {
+                                RadiografiasAdapter(it.radiografias)
+                            } else {
+                                SimpleListAdapter(listOf("Sin datos"))
+                            }
+
                             diagnosticosList.adapter = SimpleListAdapter(it.diagnosticos ?: listOf("Sin datos"))
                             vacunasList.adapter = SimpleListAdapter(it.vacunas ?: listOf("Sin datos"))
                             notasList.adapter = SimpleListAdapter(listOf(it.notasAdicionales ?: "Sin notas"))
@@ -131,6 +140,14 @@ class ExpedienteActivity : AppCompatActivity() {
         }
     }
 
+    private fun cerrarSesion() {
+        FirebaseAuth.getInstance().signOut()  // Cierra sesión
+
+        val intent = Intent(this, IniciarSesion::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        finish()
+    }
 
 
     class SimpleListAdapter(private val items: List<String>) :
