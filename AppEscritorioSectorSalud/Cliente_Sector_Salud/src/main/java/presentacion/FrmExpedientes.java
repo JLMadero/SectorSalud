@@ -107,6 +107,11 @@ public class FrmExpedientes extends javax.swing.JFrame {
         btnNotificaciones.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         btnNotificaciones.setText("Notificaciones");
         btnNotificaciones.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnNotificaciones.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNotificacionesActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -252,6 +257,10 @@ public class FrmExpedientes extends javax.swing.JFrame {
         frmPrincipal.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnInicioActionPerformed
+
+    private void btnNotificacionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNotificacionesActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnNotificacionesActionPerformed
 
     private void llenarTabla() {
         DefaultTableModel modelo = new DefaultTableModel(

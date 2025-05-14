@@ -8,6 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import java.util.Date;
 
 
 
@@ -21,6 +22,8 @@ public class PacientesAsignados {
     private String pacienteUuid;
 
     private String profesionalCedula;
+    
+    private Date fecha;
 
     public Long getId() {
         return id;
@@ -45,6 +48,16 @@ public class PacientesAsignados {
     public void setProfesionalCedula(String profesionalCedula) {
         this.profesionalCedula = profesionalCedula;
     }
+
+    public Date getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
+    }
+    
+    
     
     
 }

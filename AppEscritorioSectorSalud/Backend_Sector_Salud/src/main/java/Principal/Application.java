@@ -30,14 +30,14 @@ public class Application {
     
    
 
-    // Este método será ejecutado al iniciar la aplicación
-    @Bean
-    public CommandLineRunner demo(RabbitMQSenderService senderService) {
-        return (args) -> {
-            // Enviar un mensaje directamente desde el main para probar
-            senderService.enviarSolicitudExpediente("12345", "abcd-1234");
-            System.out.println("Mensaje enviado a la cola Cliente/Servidor");
-        };
-    }
+//    // Este método será ejecutado al iniciar la aplicación
+//    @Bean
+//    public CommandLineRunner demo(RabbitMQSenderService senderService) {
+//        return (args) -> {
+//            // Enviar un mensaje directamente desde el main para probar
+//            senderService.enviarSolicitudExpediente("12345", "abcd-1234");
+//            System.out.println("Mensaje enviado a la cola Cliente/Servidor");
+//        };
+//    }
     
 }
