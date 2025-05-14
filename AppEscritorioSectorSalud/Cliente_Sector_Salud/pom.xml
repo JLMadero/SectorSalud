@@ -18,7 +18,7 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>Backend_Sector_Salud</artifactId>
+            <artifactId>Servicios</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

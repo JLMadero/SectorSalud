@@ -1,9 +1,9 @@
 package presentacion;
 
-import backend.ApiClient;
 import javax.swing.table.DefaultTableModel;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import solicitudes.ApiClient;
 
 /**
  *
@@ -17,10 +17,11 @@ import org.json.JSONObject;
  */
 public class FrmExpedientes extends javax.swing.JFrame {
 
-    ApiClient apiClient = new ApiClient();
+    ApiClient apiClient;
 
     public FrmExpedientes() {
         initComponents();
+        apiClient = new ApiClient();
         llenarTabla();
     }
 
