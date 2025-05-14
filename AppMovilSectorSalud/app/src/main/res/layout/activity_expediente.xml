@@ -291,5 +291,18 @@
                 />
 
         </LinearLayout>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnCerrarSesion"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20sp"
+            android:textAllCaps="false"
+            android:text="Cerrar sesion"
+            android:padding="8dp"
+            android:textColor="@android:color/black"
+            android:background="@drawable/boton_redondito"
+            />
     </LinearLayout>
 </android.widget.ScrollView>

@@ -9,11 +9,15 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.auth
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.util.Date
+
 
 class RegistrarseActivity : AppCompatActivity() {
 
@@ -71,18 +75,116 @@ class RegistrarseActivity : AppCompatActivity() {
                     Toast.LENGTH_SHORT
                 ).show()
             } else {
-                signUp(
-                    nombres,
-                    apellidoPaterno,
-                    apellidoMaterno,
-                    curp,
-                    fechaNacimiento,
-                    email,
-                    password
-                )
+                val edad = calcularEdad(fechaNacimiento)
+
+                // Siempre registrar al usuario en Firebase
+                auth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this) { task ->
+                        if (task.isSuccessful) {
+                            val user = auth.currentUser
+                            val usuario = mapOf(
+                                "usuarioId" to user!!.uid,
+                                "nombres" to nombres,
+                                "apellidoPaterno" to apellidoPaterno,
+                                "apellidoMaterno" to apellidoMaterno,
+                                "curp" to curp,
+                                "fechaNacimiento" to fechaNacimiento,
+                                "email" to email
+                            )
+
+                            val mensaje = NuevoPaciente(
+                                nombre = nombres,
+                                apellidoPaterno = apellidoPaterno,
+                                apellidoMaterno = apellidoMaterno,
+                                id = user.uid,
+                                fechaCreacion = Date()
+                            )
+
+                            ApiClient.instance.enviarPaciente(mensaje)
+                                .enqueue(object : Callback<Void> {
+                                    override fun onResponse(
+                                        call: Call<Void>,
+                                        response: Response<Void>
+                                    ) {
+                                        if (response.isSuccessful) {
+                                            Toast.makeText(
+                                                this@RegistrarseActivity,
+                                                "Nuevo paciente enviado a la API",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        } else {
+                                            Toast.makeText(
+                                                this@RegistrarseActivity,
+                                                "Error al enviar paciente: ${response.code()}",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        }
+                                    }
+
+                                    override fun onFailure(call: Call<Void>, t: Throwable) {
+                                        Toast.makeText(
+                                            this@RegistrarseActivity,
+                                            "Fallo de conexión: ${t.message}",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                                })
+
+
+                            val database = FirebaseDatabase.getInstance()
+                            val reference = database.getReference("Usuarios")
+                            reference.child(user.uid).setValue(usuario)
+                                .addOnSuccessListener {
+                                    Toast.makeText(
+                                        this,
+                                        "Usuario registrado correctamente",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    // Si es menor, va a HuellaTutor. Si no, a ExpedienteActivity
+                                    if (edad < 18) {
+                                        val intent = Intent(this, HuellaTutor::class.java)
+                                        startActivity(intent)
+                                    } else {
+                                        val intent = Intent(this, ExpedienteActivity::class.java)
+                                        startActivity(intent)
+                                    }
+                                    finish()
+                                }
+                                .addOnFailureListener {
+                                    Toast.makeText(
+                                        this,
+                                        "Error al guardar en Realtime Database",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+
+                        } else {
+                            Toast.makeText(
+                                this,
+                                "El registro falló: ${task.exception?.message}",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
             }
         }
 
+
+    }
+
+    private fun calcularEdad(fechaNacimiento: String): Int {
+        val formato = java.text.SimpleDateFormat("dd/MM/yyyy")
+        val fechaNac = formato.parse(fechaNacimiento)
+        val hoy = java.util.Calendar.getInstance()
+        val nacimiento = java.util.Calendar.getInstance()
+        nacimiento.time = fechaNac
+
+        var edad = hoy.get(java.util.Calendar.YEAR) - nacimiento.get(java.util.Calendar.YEAR)
+
+        if (hoy.get(java.util.Calendar.DAY_OF_YEAR) < nacimiento.get(java.util.Calendar.DAY_OF_YEAR)) {
+            edad--
+        }
+        return edad
     }
 
     private fun showDatePickerDialog() {
@@ -105,39 +207,56 @@ class RegistrarseActivity : AppCompatActivity() {
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     val user = auth.currentUser
+                    val edad = calcularEdad(fechaNacimiento)
 
-                    val usuario = mapOf(
-                        "usuarioId" to user!!.uid,
-                        "nombres" to nombres,
-                        "apellidoPaterno" to apellidoPaterno,
-                        "apellidoMaterno" to apellidoMaterno,
-                        "curp" to curp,
-                        "fechaNacimiento" to fechaNacimiento,
-                        "email" to email
-                    )
+                    if (edad < 18) {
+                        // ✅ Aquí está el cambio importante: la cuenta ya fue creada, ahora sí pasamos
+                        val intent = Intent(this, HuellaTutor::class.java)
+                        intent.putExtra("usuarioId", user?.uid)
+                        intent.putExtra("nombres", nombres)
+                        intent.putExtra("apellidoPaterno", apellidoPaterno)
+                        intent.putExtra("apellidoMaterno", apellidoMaterno)
+                        intent.putExtra("curp", curp)
+                        intent.putExtra("fechaNacimiento", fechaNacimiento)
+                        intent.putExtra("email", email)
+                        // Puedes guardar la contraseña si realmente la necesitas más adelante (no recomendado)
+                        startActivity(intent)
+                        finish()
+                    } else {
+                        // Usuario mayor de edad: guardar en base de datos
+                        val usuario = mapOf(
+                            "usuarioId" to user!!.uid,
+                            "nombres" to nombres,
+                            "apellidoPaterno" to apellidoPaterno,
+                            "apellidoMaterno" to apellidoMaterno,
+                            "curp" to curp,
+                            "fechaNacimiento" to fechaNacimiento,
+                            "email" to email
+                        )
 
-                    // Guardar en Realtime Database
-                    val reference = database.getReference("Usuarios")
-                    reference.child(user.uid).setValue(usuario)
-                        .addOnSuccessListener {
-                            Toast.makeText(
-                                this,
-                                "Usuario registrado correctamente",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            val intent = Intent(this, ExpedienteActivity::class.java)
-                            startActivity(intent)
-                            finish()
-                        }
-                        .addOnFailureListener {
-                            Toast.makeText(
-                                this,
-                                "Error al guardar en Realtime Database",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
+                        val reference = database.getReference("Usuarios")
+                        reference.child(user.uid).setValue(usuario)
+                            .addOnSuccessListener {
+                                Toast.makeText(
+                                    this,
+                                    "Usuario registrado correctamente",
+                                    Toast.LENGTH_SHORT
+                                ).show()
 
+                                val intent = Intent(this, ExpedienteActivity::class.java)
+                                startActivity(intent)
+                                finish()
+                            }
+                            .addOnFailureListener {
+                                Toast.makeText(
+                                    this,
+                                    "Error al guardar en Realtime Database",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                    }
                 } else {
+                    // ⚠️ Aquí manejamos el error real del registro
                     Toast.makeText(
                         this,
                         "El registro falló: ${task.exception?.message}",
