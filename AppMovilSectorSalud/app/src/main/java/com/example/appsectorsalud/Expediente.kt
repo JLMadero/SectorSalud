@@ -1,8 +1,10 @@
 package com.example.appsectorsalud
 
 data class Expediente(
-    val id: String,
-    val pacienteId: String,
+    val fechaCreacion: String,
     val alergias: List<String>,
+    val diagnosticos: List<String>,
+    val vacunas: List<String>,
+    val radiografias: List<String>,
     val notasAdicionales: String
 )

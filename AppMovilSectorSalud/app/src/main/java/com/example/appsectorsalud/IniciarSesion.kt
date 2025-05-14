@@ -84,6 +84,13 @@ class IniciarSesion : AppCompatActivity() {
                 try {
                     val json = JSONObject(mensaje)
 
+                    val userId = FirebaseAuth.getInstance().currentUser?.uid
+
+                    if (userId == null) {
+                        Log.e("RabbitMQ", "Usuario no autenticado")
+                        return@runOnUiThread
+                    }
+
                     val data = mapOf(
                         "fecha" to json.getString("fecha"),
                         "idPaciente" to json.getString("idPaciente"),
@@ -94,7 +101,7 @@ class IniciarSesion : AppCompatActivity() {
                     )
 
                     val db = FirebaseDatabase.getInstance()
-                    val mensajesRef = db.getReference("mensajes")
+                    val mensajesRef = db.getReference("Usuarios").child(userId).child("mensajes")
                     mensajesRef.push().setValue(data)
                         .addOnSuccessListener {
                             Log.d("RealtimeDB", "Mensaje guardado correctamente")

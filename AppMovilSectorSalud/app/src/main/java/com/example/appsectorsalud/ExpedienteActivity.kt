@@ -16,6 +16,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import android.widget.TextView as AndroidTextView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.appsectorsalud.databinding.ActivityExpedienteBinding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 
 class ExpedienteActivity : AppCompatActivity() {
 
@@ -24,6 +26,9 @@ class ExpedienteActivity : AppCompatActivity() {
     private lateinit var nombreTextView: TextView
     private lateinit var creationDateTextView: TextView
     private lateinit var alergiasList: RecyclerView
+    private lateinit var radiografiasList: RecyclerView
+    private lateinit var diagnosticosList: RecyclerView
+    private lateinit var vacunasList: RecyclerView
     private lateinit var notasList: RecyclerView
     private val pacienteId = "12347"
 
@@ -41,7 +46,13 @@ class ExpedienteActivity : AppCompatActivity() {
         creationDateTextView = findViewById(R.id.creationDate)
         alergiasList = findViewById(R.id.alergiasList)
         notasList = findViewById(R.id.notasList)
+        radiografiasList = findViewById(R.id.radiografiasList)
+        vacunasList = findViewById(R.id.vacunasList)
+        diagnosticosList = findViewById(R.id.diagnosticosList)
 
+        vacunasList.layoutManager = LinearLayoutManager(this)
+        radiografiasList.layoutManager = LinearLayoutManager(this)
+        diagnosticosList.layoutManager = LinearLayoutManager(this)
         alergiasList.layoutManager = LinearLayoutManager(this)
         notasList.layoutManager = LinearLayoutManager(this)
 
@@ -69,28 +80,58 @@ class ExpedienteActivity : AppCompatActivity() {
     }
 
     private fun loadExpediente() {
-        ApiClient.instance.getExpedientePorId(pacienteId).enqueue(object : Callback<Expediente> {
-            override fun onResponse(call: Call<Expediente>, response: Response<Expediente>) {
-                if (response.isSuccessful) {
-                    val expediente = response.body()
-                    expediente?.let {
-                        patientIdTextView.text = it.pacienteId
-                        nombreTextView.text = "Nombre no disponible"
-                        creationDateTextView.text = "Fecha no disponible"
+        val uid = FirebaseAuth.getInstance().currentUser?.uid
 
-                        alergiasList.adapter = SimpleListAdapter(it.alergias ?: listOf("Sin datos"))
-                        notasList.adapter = SimpleListAdapter(listOf(it.notasAdicionales ?: "Sin notas"))
+        if (uid == null) {
+            Log.e("FirebaseAuth", "Usuario no autenticado")
+            return
+        }
+
+        val database = FirebaseDatabase.getInstance()
+        val usuarioRef = database.getReference("Usuarios").child(uid)
+
+        usuarioRef.get().addOnSuccessListener { snapshot ->
+            val curp = snapshot.child("curp").getValue(String::class.java) ?: "CURP no disponible"
+            val nombres = snapshot.child("nombres").getValue(String::class.java) ?: ""
+            val apellidoPaterno = snapshot.child("apellidoPaterno").getValue(String::class.java) ?: ""
+            val apellidoMaterno = snapshot.child("apellidoMaterno").getValue(String::class.java) ?: ""
+
+            val nombreCompleto = "$nombres $apellidoPaterno $apellidoMaterno".trim()
+
+            ApiClient.instance.getExpedientePorId(uid).enqueue(object : Callback<Expediente> {
+                override fun onResponse(call: Call<Expediente>, response: Response<Expediente>) {
+                    if (response.isSuccessful) {
+                        val expediente = response.body()
+                        expediente?.let {
+                            patientIdTextView.text = curp
+                            nombreTextView.text = if (nombreCompleto.isNotBlank()) nombreCompleto else "Nombre no disponible"
+                            // Si es tipo String con formato completo, como "2025-05-12T08:58:37"
+                            val rawDate = it.fechaCreacion ?: "Fecha no disponible"
+                            val soloFecha = rawDate.split("T").firstOrNull() ?: rawDate
+                            creationDateTextView.text = soloFecha
+
+
+                            alergiasList.adapter = SimpleListAdapter(it.alergias ?: listOf("Sin datos"))
+                            radiografiasList.adapter = SimpleListAdapter(it.radiografias ?: listOf("Sin datos"))
+                            diagnosticosList.adapter = SimpleListAdapter(it.diagnosticos ?: listOf("Sin datos"))
+                            vacunasList.adapter = SimpleListAdapter(it.vacunas ?: listOf("Sin datos"))
+                            notasList.adapter = SimpleListAdapter(listOf(it.notasAdicionales ?: "Sin notas"))
+                        }
+                    } else {
+                        Log.e("API_ERROR", "Código de error: ${response.code()}")
                     }
-                } else {
-                    Log.e("API_ERROR", "Código de error: ${response.code()}")
                 }
-            }
 
-            override fun onFailure(call: Call<Expediente>, t: Throwable) {
-                Log.e("API_FAILURE", "Error: ${t.message}")
-            }
-        })
+                override fun onFailure(call: Call<Expediente>, t: Throwable) {
+                    Log.e("API_FAILURE", "Error: ${t.message}")
+                }
+            })
+        }.addOnFailureListener {
+            Log.e("FirebaseDB", "Error al obtener datos del usuario: ${it.message}")
+        }
     }
+
+
 
     class SimpleListAdapter(private val items: List<String>) :
         RecyclerView.Adapter<SimpleListAdapter.ViewHolder>() {

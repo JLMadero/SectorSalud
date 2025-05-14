@@ -9,9 +9,9 @@
               <option name="connection">
                 <ConnectionSetting>
                   <option name="appId" value="com.example.appsectorsalud" />
-                  <option name="mobileSdkAppId" value="1:981777734028:android:96c54bd2fef439c0b81ea9" />
-                  <option name="projectId" value="proyectofinal-tripsplit" />
-                  <option name="projectNumber" value="981777734028" />
+                  <option name="mobileSdkAppId" value="1:249755463423:android:18ebdbcd6459517f7fe6ca" />
+                  <option name="projectId" value="sectorsalud-591c3" />
+                  <option name="projectNumber" value="249755463423" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
