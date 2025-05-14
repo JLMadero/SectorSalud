@@ -9,8 +9,8 @@ package service;
  * @author jl4ma
  */
 
-import backend.ApiClient;
 import org.springframework.stereotype.Service;
+import solicitudes.ApiClient;
 
 @Service
 public class ExpedienteService {
