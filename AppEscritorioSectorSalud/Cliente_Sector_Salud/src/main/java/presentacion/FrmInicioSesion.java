@@ -81,6 +81,11 @@ public class FrmInicioSesion extends javax.swing.JFrame {
         panelRound1.setRoundTopRight(20);
 
         txtCedula.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        txtCedula.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCedulaKeyTyped(evt);
+            }
+        });
 
         btnIniciarSesion.setBackground(new java.awt.Color(157, 36, 73));
         btnIniciarSesion.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
@@ -99,6 +104,7 @@ public class FrmInicioSesion extends javax.swing.JFrame {
         lblLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/logoTitulo.png"))); // NOI18N
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(102, 102, 102));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("EXPEDIENTE CLÍNICO ELECTRÓNICO");
 
@@ -170,6 +176,15 @@ public class FrmInicioSesion extends javax.swing.JFrame {
         frmPrincipal.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnIniciarSesionActionPerformed
+
+    private void txtCedulaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCedulaKeyTyped
+        char c = evt.getKeyChar();
+
+        if (!Character.isDigit(c) && c != '\b') {
+            evt.consume();
+            return;
+        }
+    }//GEN-LAST:event_txtCedulaKeyTyped
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnIniciarSesion;
