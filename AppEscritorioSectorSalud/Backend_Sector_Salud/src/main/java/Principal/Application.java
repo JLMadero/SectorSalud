@@ -28,17 +28,15 @@ public class Application {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
-    
-   
 
     // Este método será ejecutado al iniciar la aplicación
-//    @Bean
-//    public CommandLineRunner demo(RabbitMQSenderService senderService) {
-//        return (args) -> {
-//            // Enviar un mensaje directamente desde el main para probar
-//            senderService.enviarSolicitudExpediente("12345", "abcd-1234");
-//            System.out.println("Mensaje enviado a la cola Cliente/Servidor");
-//        };
-//    }
+    @Bean
+    public CommandLineRunner demo(RabbitMQSenderService senderService) {
+        return (args) -> {
+            // Enviar un mensaje directamente desde el main para probar
+            senderService.enviarSolicitudExpediente("123456", "abcd-1234");
+            System.out.println("Mensaje enviado a la cola Cliente/Servidor");
+        };
+    }
     
 }

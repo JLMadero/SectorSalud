@@ -24,6 +24,8 @@ public class FrmExpedientes extends javax.swing.JFrame {
     public FrmExpedientes(Profesional profesionalSesion) {
         initComponents();
         this.profesionalSesion = profesionalSesion;
+        lblNombreDoctor.setText("Dr. " + profesionalSesion.getNombre());
+        lblCedulaDoctor.setText("Cédula: " + profesionalSesion.getCedula());
         apiClient = new ApiClient();
         llenarTabla();
     }

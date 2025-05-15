@@ -27,11 +27,11 @@ public class ProfesionalDAO implements IProfesionalDAO{
     public void inserciones(){
         em.getTransaction().begin();
         List<Profesional> profesionales = new ArrayList<>();
-        profesionales.add(new Profesional("235633", "Adriana"));
-        profesionales.add(new Profesional("247122", "Diego"));
-        profesionales.add(new Profesional("245136", "Jefra"));
-        profesionales.add(new Profesional("12345", "Gomez"));
-        profesionales.add(new Profesional("244903", "Madero"));
+        profesionales.add(new Profesional("235633", "Adriana Gutiérrez"));
+        profesionales.add(new Profesional("247122", "Diego Alcantar"));
+        profesionales.add(new Profesional("245136", "Jesús Tapia"));
+        profesionales.add(new Profesional("123456", "Alejandro Gomez"));
+        profesionales.add(new Profesional("244903", "José Madero"));
         
         for(Profesional pro: profesionales){
             em.persist(pro);

@@ -9,7 +9,7 @@ package fachada;
  * @author jl4ma
  */
 public class MensajeRecibidoDTO {
-     private Long id;
+    private Long id;
     private String cedulaProfesional;
     private String tipoMensaje;
     private String contenido;
@@ -45,6 +45,4 @@ public class MensajeRecibidoDTO {
     public void setContenido(String contenido) {
         this.contenido = contenido;
     }
-    
-    
 }

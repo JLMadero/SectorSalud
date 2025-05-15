@@ -18,8 +18,8 @@ public class FrmAgendaCitas extends javax.swing.JFrame {
     public FrmAgendaCitas(Profesional profesionalSesion) {
         initComponents();
         this.profesionalSesion = profesionalSesion;
-        lblNombreDoctor.setText(profesionalSesion.getNombre());
-        lblCedulaDoctor.setText(profesionalSesion.getCedula());
+        lblNombreDoctor.setText("Dr. " + profesionalSesion.getNombre());
+        lblCedulaDoctor.setText("Cédula: " + profesionalSesion.getCedula());
     }
 
     @SuppressWarnings("unchecked")

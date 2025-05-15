@@ -1,5 +1,10 @@
 package presentacion;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import fachada.ContenidoMensaje;
+import fachada.MensajeRecibidoDTO;
+import java.util.List;
+import javax.swing.JOptionPane;
 import model.Profesional;
 
 /**
@@ -15,6 +20,31 @@ import model.Profesional;
 public class FrmPrincipal extends javax.swing.JFrame {
     
     private Profesional profesionalSesion;
+    private List<MensajeRecibidoDTO> mensajes;
+
+    public FrmPrincipal(Profesional profesionalSesion, List<MensajeRecibidoDTO> mensajes) {
+        initComponents();
+        this.profesionalSesion = profesionalSesion;
+        this.mensajes = mensajes;
+        
+        lblNombreDoctor.setText("Dr. " + profesionalSesion.getNombre());
+        lblCedulaDoctor.setText("Cédula: " + profesionalSesion.getCedula());
+    }
+    
+    public void mostrarMensajes() {
+        ObjectMapper mapper = new ObjectMapper();
+
+        for (MensajeRecibidoDTO mensaje : mensajes) {
+            try {
+                ContenidoMensaje contenido = mapper.readValue(mensaje.getContenido(), ContenidoMensaje.class);
+                String textoM = "Paciente: " + contenido.getPacienteUuid() + "\nTipo: " + contenido.getTipo();
+                JOptionPane.showMessageDialog(this, textoM, "Nueva notificación", JOptionPane.INFORMATION_MESSAGE);
+            } catch (Exception e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Error al leer el contenido del mensaje", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
 
     public FrmPrincipal(Profesional profesionalSesion) {
         initComponents();

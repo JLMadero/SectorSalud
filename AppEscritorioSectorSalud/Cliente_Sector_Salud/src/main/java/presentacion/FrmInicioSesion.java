@@ -1,7 +1,10 @@
 package presentacion;
 
+import ProfesionalDAO.ProfesionalDAO;
 import fachada.Fachada;
 import fachada.IFachada;
+import fachada.MensajeRecibidoDTO;
+import java.util.List;
 import javax.swing.JOptionPane;
 import model.Profesional;
 
@@ -22,7 +25,14 @@ public class FrmInicioSesion extends javax.swing.JFrame {
     public FrmInicioSesion() {
         initComponents();
         fachada = new Fachada();
-        fachada.insercion();
+        
+        if(!insercionInicial()){
+            fachada.insercion();
+        }
+    }
+    
+    public boolean insercionInicial() {
+        return fachada.obtenerProfesional("235633")!=null;
     }
     
     @SuppressWarnings("unchecked")
@@ -176,24 +186,32 @@ public class FrmInicioSesion extends javax.swing.JFrame {
     private void btnIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSesionActionPerformed
         fachada = new Fachada();
         String cedula = txtCedula.getText().trim();
-        boolean sesionIniciada = fachada.iniciarSesion(cedula);
 
         if (txtCedula.getText().isBlank()) {
             JOptionPane.showMessageDialog(this, "Favor de ingresar cédula profesional", "Campo vacío",
                     JOptionPane.WARNING_MESSAGE);
-        } else {
-            if (sesionIniciada) {
-                Profesional profesionalSesion = fachada.obtenerProfesional(cedula);
-                JOptionPane.showMessageDialog(this, "Sesión iniciada correctamente", "Inicio de sesión", 
-                        JOptionPane.INFORMATION_MESSAGE);
-                FrmPrincipal frmPrincipal = new FrmPrincipal(profesionalSesion);
-                frmPrincipal.setVisible(true);
-                dispose();
-            } else {
-                JOptionPane.showMessageDialog(this, "Cédula no encontrada", "Error",
-                        JOptionPane.ERROR_MESSAGE);
-            }
+            return;
         }
+        
+        boolean sesionIniciada = fachada.iniciarSesion(cedula);
+
+        if (sesionIniciada) {
+            Profesional profesionalSesion = fachada.obtenerProfesional(cedula);
+            
+            List<MensajeRecibidoDTO> mensajes = fachada.obtenerMensajesPorCedula(cedula);
+        
+            JOptionPane.showMessageDialog(this, "Sesión iniciada correctamente", "Inicio de sesión",
+                    JOptionPane.INFORMATION_MESSAGE);
+            
+            FrmPrincipal frmPrincipal = new FrmPrincipal(profesionalSesion, mensajes);
+            frmPrincipal.setVisible(true);
+            frmPrincipal.mostrarMensajes();
+            dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, "Cédula no encontrada", "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+
     }//GEN-LAST:event_btnIniciarSesionActionPerformed
 
     private void txtCedulaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCedulaKeyTyped
