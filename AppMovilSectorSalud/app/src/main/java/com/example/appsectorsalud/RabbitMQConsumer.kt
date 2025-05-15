@@ -6,9 +6,9 @@ import kotlinx.coroutines.*
 import java.nio.charset.StandardCharsets
 
 object RabbitMQConsumer {
-    private const val QUEUE_NAME = "appmovil"
-    private const val EXCHANGE_NAME = "solicitudes"
-    private const val ROUTING_KEY = "expediente"
+    private const val QUEUE_NAME = "Cliente/Servidor"
+    private const val EXCHANGE_NAME = "Cliente/Servidor"
+    private const val ROUTING_KEY = "Expediente"
 
     fun iniciarConsumo(onMensajeRecibido: (String) -> Unit) {
         CoroutineScope(Dispatchers.IO).launch {

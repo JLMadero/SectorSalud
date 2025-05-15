@@ -1,12 +1,11 @@
 package com.example.appsectorsalud.data
 
-import java.util.Date
-
 data class MensajeAgendar(
     val idPaciente: String,
+    val nombre: String,
     val idProfesional: String,
     val tipo: String,
-    val fecha: Date,
+    val fecha: String,
     val jwt: String
 
 

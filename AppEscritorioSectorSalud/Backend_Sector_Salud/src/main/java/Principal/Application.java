@@ -34,7 +34,7 @@ public class Application {
     public CommandLineRunner demo(RabbitMQSenderService senderService) {
         return (args) -> {
             // Enviar un mensaje directamente desde el main para probar
-            senderService.enviarSolicitudExpediente("123456", "abcd-1234");
+            senderService.enviarSolicitudExpediente("247313", "SoIr4DRRA4dmMk8FcDJBvMppOPT2");
             System.out.println("Mensaje enviado a la cola Cliente/Servidor");
         };
     }

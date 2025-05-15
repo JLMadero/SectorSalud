@@ -60,6 +60,8 @@ class NotificacionesActivity : AppCompatActivity() {
         }
     }
 
+
+
     private fun aceptarSolicitud(mensaje: String) {
         Log.d("Notificaciones", "Solicitud aceptada: $mensaje")
     }

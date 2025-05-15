@@ -66,30 +66,35 @@ class CitaActivity : AppCompatActivity() {
         val fechaTexto = binding.editTextFecha.text.toString()
         val idDoctor = binding.editTextIdDoctor.text.toString()
         val uidPaciente = FirebaseAuth.getInstance().currentUser?.uid
+        val nombrePaciente = FirebaseAuth.getInstance().currentUser?.displayName ?: "Desconocido"
 
         if (fechaTexto.isEmpty() || idDoctor.isEmpty() || uidPaciente == null) {
             Toast.makeText(this, "Todos los campos son obligatorios", Toast.LENGTH_SHORT).show()
             return
         }
 
-        // Convertir fechaTexto (dd/MM/yyyy) a Date
-        val formato = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-        val fecha: Date? = try {
-            formato.parse(fechaTexto)
+        val formatoEntrada = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        val formatoSalida = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+
+        val fechaDate: Date? = try {
+            formatoEntrada.parse(fechaTexto)
         } catch (e: ParseException) {
             null
         }
 
-        if (fecha == null) {
+        if (fechaDate == null) {
             Toast.makeText(this, "Formato de fecha inválido", Toast.LENGTH_SHORT).show()
             return
         }
 
+        val fechaFormateada = formatoSalida.format(fechaDate)
+
         val mensaje = MensajeAgendar(
             idPaciente = uidPaciente,
+            nombre = nombrePaciente,
             idProfesional = idDoctor,
-            tipo = "Agendar cita",
-            fecha = fecha,  // ahora sí es tipo Date
+            tipo = "AgendarCita", //noti RespuestaSolicitud
+            fecha = fechaFormateada,
             jwt = "mi_token_simulado"
         )
 
