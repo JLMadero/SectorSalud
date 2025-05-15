@@ -30,7 +30,7 @@ public class ProfesionalDAO implements IProfesionalDAO{
         profesionales.add(new Profesional("235633", "Adriana Gutiérrez"));
         profesionales.add(new Profesional("247122", "Diego Alcantar"));
         profesionales.add(new Profesional("245136", "Jesús Tapia"));
-        profesionales.add(new Profesional("123456", "Alejandro Gomez"));
+        profesionales.add(new Profesional("247313", "Alejandro Gomez"));
         profesionales.add(new Profesional("244903", "José Madero"));
         
         for(Profesional pro: profesionales){

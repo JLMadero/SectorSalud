@@ -19,11 +19,11 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitMQConfig {
 
     // Nombre del exchange y la cola
-    public static final String EXCHANGE_NAME = "Cliente/Servidor";
-    public static final String CLIENTE_SERVIDOR_QUEUE = "Cliente/Servidor";
+    public static final String EXCHANGE_NAME = "solicitudes";
+    public static final String CLIENTE_SERVIDOR_QUEUE = "appmovil";
 
     // Routing key para enviar mensajes
-    public static final String EXPEDIENTE_ROUTING_KEY = "Expediente";
+    public static final String EXPEDIENTE_ROUTING_KEY = "expediente";
 
     // Declaración de la cola
     @Bean

@@ -31,6 +31,11 @@ public class RabbitMQListenerService {
         try {
             JsonNode root = objectMapper.readTree(mensajeJson);
             String tipo = root.get("tipo").asText();
+//            if ("AgendarCita".equals(tipo)) {
+//                
+//            }else if("RespuestaSolicitud"){
+//                
+//            }
             String cedulaProfesional = root.get("cedulaProfesional").asText();
             String pacienteUuid = root.get("pacienteUuid").asText();
 
