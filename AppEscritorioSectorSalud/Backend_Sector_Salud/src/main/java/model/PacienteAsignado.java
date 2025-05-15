@@ -9,6 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Date;
 
 /**
@@ -26,7 +27,7 @@ public class PacienteAsignado {
 
     private String profesionalCedula;
     
-    private Date fecha;
+    private LocalDate fecha;
 
     public Long getId() {
         return id;
@@ -52,11 +53,11 @@ public class PacienteAsignado {
         this.profesionalCedula = profesionalCedula;
     }
 
-    public Date getFecha() {
+    public LocalDate getFecha() {
         return fecha;
     }
 
-    public void setFecha(Date fecha) {
+    public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
     }
 }

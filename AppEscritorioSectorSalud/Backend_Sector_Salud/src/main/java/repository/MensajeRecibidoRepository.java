@@ -10,9 +10,12 @@ package repository;
  */
 
 import java.util.List;
+import java.util.Optional;
 import model.MensajeRecibido;
+import model.PacienteAsignado;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MensajeRecibidoRepository extends JpaRepository<MensajeRecibido, Long> {
     List<MensajeRecibido> findByCedulaProfesional(String cedulaProfesional);
+    
 }

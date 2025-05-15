@@ -6,8 +6,13 @@ package service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import model.MensajeRecibido;
+import model.PacienteAsignado;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
 import rabbitConfig.RabbitMQConfig;
@@ -28,24 +33,55 @@ public class RabbitMQListenerService {
 
     @RabbitListener(queues = RabbitMQConfig.CLIENTE_SERVIDOR_QUEUE)
     public void recibirMensajes(String mensajeJson) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         try {
+            MensajeRecibido mensaje = new MensajeRecibido();
             JsonNode root = objectMapper.readTree(mensajeJson);
             String tipo = root.get("tipo").asText();
-//            if ("AgendarCita".equals(tipo)) {
-//                
-//            }else if("RespuestaSolicitud"){
-//                
-//            }
-            String cedulaProfesional = root.get("cedulaProfesional").asText();
-            String pacienteUuid = root.get("pacienteUuid").asText();
+            String nombre = root.get("nombre").asText();
+            String cedulaProfesional = root.get("idProfesional").asText();
+            String uuid = root.get("idPaciente ").asText();
 
+            mensaje.setCedulaProfesional(cedulaProfesional);
+            mensaje.setPacienteUuid(uuid);
+            mensaje.setTipoMensaje(tipo);
+            mensaje.setNombre(nombre);
             // Procesa el mensaje según el tipo
-            if ("SolicitudExpediente".equals(tipo)) {
-                // Guardar en la base de datos
-                MensajeRecibido mensaje = new MensajeRecibido();
-                mensaje.setCedulaProfesional(cedulaProfesional);
-                mensaje.setTipoMensaje(tipo);
-                mensaje.setContenido(mensajeJson);
+            if ("AgendarCita".equals(tipo)) {
+                // Extraer y parsear fecha
+                String fecha = root.get("fecha").asText();
+                 // ajusta según tu formato
+                LocalDate fechaCita = LocalDate.parse(fecha, formatter);
+
+                // Guardar mensaje
+                mensaje.setFechaCita(fechaCita);
+                mensajeRepo.save(mensaje);
+
+                // Buscar si ya existe
+                Optional<PacienteAsignado> existente = pacienteRepo.findByPacienteUuidAndProfesionalCedula(uuid, cedulaProfesional);
+
+                if (existente.isPresent()) {
+                    PacienteAsignado existentePaciente = existente.get();
+                    existentePaciente.setFecha(fechaCita); // solo actualizas la fecha
+                    pacienteRepo.save(existentePaciente);
+                } else {
+                    // Si no existe, creas uno nuevo
+                    PacienteAsignado nuevo = new PacienteAsignado();
+                    nuevo.setPacienteUuid(uuid);
+                    nuevo.setProfesionalCedula(cedulaProfesional);
+                    nuevo.setFecha(fechaCita);
+                    pacienteRepo.save(nuevo);
+                }
+            } else if ("RespuestaSolicitud".equals(tipo)) {
+                String respuesta = root.get("respuesta").asText();
+                boolean resultado = Boolean.parseBoolean(respuesta);
+                if (resultado) {
+                String fecha = root.get("fechaPermiso").asText();
+                LocalDate fechaCita = LocalDate.parse(fecha, formatter);
+                mensaje.setFechaPermiso(fechaCita);
+                }
+                mensaje.setRespuesta(resultado);
+                
                 mensajeRepo.save(mensaje);
             }
 
@@ -54,6 +90,3 @@ public class RabbitMQListenerService {
         }
     }
 }
-
-
-

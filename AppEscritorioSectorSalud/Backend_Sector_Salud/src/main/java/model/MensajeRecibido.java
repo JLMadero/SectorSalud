@@ -9,6 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import java.io.Serializable;
+import java.time.LocalDate;
 
 /**
  *
@@ -22,10 +23,18 @@ public class MensajeRecibido {
     private Long id;
 
     private String cedulaProfesional;
+    
+    private String pacienteUuid;
 
     private String tipoMensaje;
 
-    private String contenido;
+    private String nombre;
+    
+    private LocalDate fechaCita;
+    
+    private LocalDate fechaPermiso;
+    
+    private boolean respuesta;
 
     public Long getId() {
         return id;
@@ -51,13 +60,47 @@ public class MensajeRecibido {
         this.tipoMensaje = tipoMensaje;
     }
 
-    public String getContenido() {
-        return contenido;
+    public String getNombre() {
+        return nombre;
     }
 
-    public void setContenido(String contenido) {
-        this.contenido = contenido;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
+
+    public LocalDate getFechaCita() {
+        return fechaCita;
+    }
+
+    public void setFechaCita(LocalDate fechaCita) {
+        this.fechaCita = fechaCita;
+    }
+
+    public LocalDate getFechaPermiso() {
+        return fechaPermiso;
+    }
+
+    public void setFechaPermiso(LocalDate fechaPermiso) {
+        this.fechaPermiso = fechaPermiso;
+    }
+
+    public boolean isRespuesta() {
+        return respuesta;
+    }
+
+    public void setRespuesta(boolean respuesta) {
+        this.respuesta = respuesta;
+    }
+
+    public String getPacienteUuid() {
+        return pacienteUuid;
+    }
+
+    public void setPacienteUuid(String pacienteUuid) {
+        this.pacienteUuid = pacienteUuid;
+    }
+
+    
     
     
 }
