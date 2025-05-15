@@ -1,5 +1,7 @@
 package presentacion;
 
+import model.Profesional;
+
 /**
  *
  * Clase que extiende de Java swing para representar graficamente el menu principal
@@ -11,9 +13,14 @@ package presentacion;
  * @author Diego Alcantar Acosta 247122
  */
 public class FrmPrincipal extends javax.swing.JFrame {
+    
+    private Profesional profesionalSesion;
 
-    public FrmPrincipal() {
+    public FrmPrincipal(Profesional profesionalSesion) {
         initComponents();
+        this.profesionalSesion = profesionalSesion;
+        lblNombreDoctor.setText("Dr. " + profesionalSesion.getNombre());
+        lblCedulaDoctor.setText("Cédula: " + profesionalSesion.getCedula());
     }
 
     @SuppressWarnings("unchecked")
@@ -90,6 +97,11 @@ public class FrmPrincipal extends javax.swing.JFrame {
         btnCerrarSesion.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         btnCerrarSesion.setText("Cerrar Sesión");
         btnCerrarSesion.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnCerrarSesion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCerrarSesionActionPerformed(evt);
+            }
+        });
 
         btnNotificaciones.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         btnNotificaciones.setText("Notificaciones");
@@ -348,16 +360,22 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnExpedientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExpedientesActionPerformed
-        FrmExpedientes frmExpedientes = new FrmExpedientes();
+        FrmExpedientes frmExpedientes = new FrmExpedientes(profesionalSesion);
         frmExpedientes.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnExpedientesActionPerformed
 
     private void btnAgendaCitasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgendaCitasActionPerformed
-        FrmAgendaCitas frmAgendaCitas = new FrmAgendaCitas();
+        FrmAgendaCitas frmAgendaCitas = new FrmAgendaCitas(profesionalSesion);
         frmAgendaCitas.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnAgendaCitasActionPerformed
+
+    private void btnCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarSesionActionPerformed
+        FrmInicioSesion inicio = new FrmInicioSesion();
+        inicio.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_btnCerrarSesionActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgendaCitas;

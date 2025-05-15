@@ -1,6 +1,7 @@
 package presentacion;
 
 import javax.swing.table.DefaultTableModel;
+import model.Profesional;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import solicitudes.ApiClient;
@@ -17,10 +18,12 @@ import solicitudes.ApiClient;
  */
 public class FrmExpedientes extends javax.swing.JFrame {
 
+    Profesional profesionalSesion;
     ApiClient apiClient;
 
-    public FrmExpedientes() {
+    public FrmExpedientes(Profesional profesionalSesion) {
         initComponents();
+        this.profesionalSesion = profesionalSesion;
         apiClient = new ApiClient();
         llenarTabla();
     }
@@ -248,13 +251,13 @@ public class FrmExpedientes extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAgendaCitasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgendaCitasActionPerformed
-        FrmAgendaCitas frmAgendaCitas = new FrmAgendaCitas();
+        FrmAgendaCitas frmAgendaCitas = new FrmAgendaCitas(profesionalSesion);
         frmAgendaCitas.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnAgendaCitasActionPerformed
 
     private void btnInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInicioActionPerformed
-        FrmPrincipal frmPrincipal = new FrmPrincipal();
+        FrmPrincipal frmPrincipal = new FrmPrincipal(profesionalSesion);
         frmPrincipal.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnInicioActionPerformed

@@ -48,7 +48,9 @@ public class ProfesionalDAO implements IProfesionalDAO{
              return false;
          }
     }
-    
-    
-    
+
+    @Override
+    public Profesional getProfesionalCedula(String cedula) {
+        return em.find(Profesional.class, cedula);
+    }
 }

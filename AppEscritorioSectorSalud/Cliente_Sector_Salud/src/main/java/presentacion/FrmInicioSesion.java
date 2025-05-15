@@ -1,5 +1,10 @@
 package presentacion;
 
+import fachada.Fachada;
+import fachada.IFachada;
+import javax.swing.JOptionPane;
+import model.Profesional;
+
 
 /**
  *
@@ -12,9 +17,12 @@ package presentacion;
  * @author Diego Alcantar Acosta 247122
  */
 public class FrmInicioSesion extends javax.swing.JFrame {
-
+    IFachada fachada;
+    
     public FrmInicioSesion() {
         initComponents();
+        fachada = new Fachada();
+        fachada.insercion();
     }
     
     @SuppressWarnings("unchecked")
@@ -29,7 +37,6 @@ public class FrmInicioSesion extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JSeparator();
         txtCedula = new presentacion.CampoTextoR(20, "Cédula Profesional");
         btnIniciarSesion = new javax.swing.JButton();
-        txtContrasenia = new presentacion.CampoPasswordR(20, "Contraseña");
         lblLogo = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
 
@@ -98,8 +105,6 @@ public class FrmInicioSesion extends javax.swing.JFrame {
             }
         });
 
-        txtContrasenia.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
-
         lblLogo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/logoTitulo.png"))); // NOI18N
 
@@ -121,8 +126,7 @@ public class FrmInicioSesion extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(panelRound1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnIniciarSesion, javax.swing.GroupLayout.DEFAULT_SIZE, 320, Short.MAX_VALUE)
-                    .addComponent(txtCedula)
-                    .addComponent(txtContrasenia))
+                    .addComponent(txtCedula))
                 .addGap(145, 145, 145))
             .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
@@ -135,13 +139,11 @@ public class FrmInicioSesion extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addGap(9, 9, 9)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(44, 44, 44)
                 .addComponent(txtCedula, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(txtContrasenia, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(28, 28, 28)
+                .addGap(40, 40, 40)
                 .addComponent(btnIniciarSesion, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(42, Short.MAX_VALUE))
+                .addContainerGap(55, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -172,9 +174,26 @@ public class FrmInicioSesion extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSesionActionPerformed
-        FrmPrincipal frmPrincipal = new FrmPrincipal();
-        frmPrincipal.setVisible(true);
-        this.dispose();
+        fachada = new Fachada();
+        String cedula = txtCedula.getText().trim();
+        boolean sesionIniciada = fachada.iniciarSesion(cedula);
+
+        if (txtCedula.getText().isBlank()) {
+            JOptionPane.showMessageDialog(this, "Favor de ingresar cédula profesional", "Campo vacío",
+                    JOptionPane.WARNING_MESSAGE);
+        } else {
+            if (sesionIniciada) {
+                Profesional profesionalSesion = fachada.obtenerProfesional(cedula);
+                JOptionPane.showMessageDialog(this, "Sesión iniciada correctamente", "Inicio de sesión", 
+                        JOptionPane.INFORMATION_MESSAGE);
+                FrmPrincipal frmPrincipal = new FrmPrincipal(profesionalSesion);
+                frmPrincipal.setVisible(true);
+                dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "Cédula no encontrada", "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }//GEN-LAST:event_btnIniciarSesionActionPerformed
 
     private void txtCedulaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCedulaKeyTyped
@@ -197,6 +216,5 @@ public class FrmInicioSesion extends javax.swing.JFrame {
     private javax.swing.JLabel lblLogo;
     private presentacion.PanelRound panelRound1;
     private javax.swing.JTextField txtCedula;
-    private javax.swing.JPasswordField txtContrasenia;
     // End of variables declaration//GEN-END:variables
 }

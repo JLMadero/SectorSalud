@@ -5,6 +5,7 @@
 package fachada;
 
 import java.util.List;
+import model.Profesional;
 
 /**
  *
@@ -15,4 +16,5 @@ public interface IFachada {
     public void insercion();
     public boolean iniciarSesion(String cedula);
     public List<MensajeRecibidoDTO> obtenerMensajesPorCedula(String cedula);
+    Profesional obtenerProfesional(String cedula);
 }

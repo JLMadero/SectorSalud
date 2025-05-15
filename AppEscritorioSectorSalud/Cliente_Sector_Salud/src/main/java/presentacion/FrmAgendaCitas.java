@@ -1,5 +1,7 @@
 package presentacion;
 
+import model.Profesional;
+
 /**
  *
  * Clase que extiende de Java swing para representar graficamente las agenda de citas
@@ -11,9 +13,13 @@ package presentacion;
  * @author Diego Alcantar Acosta 247122
  */
 public class FrmAgendaCitas extends javax.swing.JFrame {
+    Profesional profesionalSesion;
 
-    public FrmAgendaCitas() {
+    public FrmAgendaCitas(Profesional profesionalSesion) {
         initComponents();
+        this.profesionalSesion = profesionalSesion;
+        lblNombreDoctor.setText(profesionalSesion.getNombre());
+        lblCedulaDoctor.setText(profesionalSesion.getCedula());
     }
 
     @SuppressWarnings("unchecked")
@@ -137,13 +143,13 @@ public class FrmAgendaCitas extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInicioActionPerformed
-        FrmPrincipal frmPrincipal = new FrmPrincipal();
+        FrmPrincipal frmPrincipal = new FrmPrincipal(profesionalSesion);
         frmPrincipal.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnInicioActionPerformed
 
     private void btnExpedientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExpedientesActionPerformed
-        FrmExpedientes frmExpedientes = new FrmExpedientes();
+        FrmExpedientes frmExpedientes = new FrmExpedientes(profesionalSesion);
         frmExpedientes.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnExpedientesActionPerformed

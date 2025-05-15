@@ -4,13 +4,15 @@
  */
 package ProfesionalDAO;
 
+import model.Profesional;
+
 /**
  *
  * @author jl4ma
  */
 public interface IProfesionalDAO {
     
-    
     public void inserciones();
-     public boolean iniciarSesion(String cedula);
+    public boolean iniciarSesion(String cedula);
+    Profesional getProfesionalCedula(String cedula);
 }

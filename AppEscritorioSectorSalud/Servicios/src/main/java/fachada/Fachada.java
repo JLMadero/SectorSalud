@@ -16,6 +16,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Collections;
 import java.util.List;
+import model.Profesional;
 import org.eclipse.persistence.internal.libraries.asm.TypeReference;
 
 /**
@@ -31,6 +32,7 @@ public class Fachada implements IFachada{
         conexion = new Conexion();
         pro = new ProfesionalDAO(conexion);
     }
+    
     @Override
     public void insercion(){
         if(!pro.iniciarSesion("244903")){
@@ -45,7 +47,6 @@ public class Fachada implements IFachada{
         return pro.iniciarSesion(cedula);
     }
     
-
     
 private static final HttpClient httpClient = HttpClient.newHttpClient();
 private static final ObjectMapper mapper = new ObjectMapper();
@@ -83,6 +84,9 @@ private static final ObjectMapper mapper = new ObjectMapper();
     }
 }
 
-
+    @Override
+    public Profesional obtenerProfesional(String cedula) {
+        return pro.getProfesionalCedula(cedula);
+    }
     
 }
