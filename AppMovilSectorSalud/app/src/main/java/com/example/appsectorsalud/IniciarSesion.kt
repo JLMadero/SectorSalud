@@ -108,39 +108,58 @@ class IniciarSesion : AppCompatActivity() {
     }
 
     fun rabbitIniciarConsumo() {
-        RabbitMQConsumer.iniciarConsumo { mensaje ->
+        RabbitMQConsumer.iniciarConsumo { rawMsg ->
             runOnUiThread {
                 try {
-                    val json = JSONObject(mensaje)
+                    val json = JSONObject(rawMsg)
 
-                    val userId = FirebaseAuth.getInstance().currentUser?.uid
-
-                    if (userId == null) {
-                        Log.e("RabbitMQ", "Usuario no autenticado")
+                    val tipo = json.optString("tipo")
+                    if (tipo.isNullOrEmpty()) {
+                        Log.e("RabbitMQ", "Mensaje sin campo 'tipo': $rawMsg")
                         return@runOnUiThread
                     }
 
-                    val data = mapOf(
-                        "fecha" to json.getString("fecha"),
-                        "idPaciente" to json.getString("idPaciente"),
-                        "idProfesional" to json.getString("idProfesional"),
-                        "jwt" to json.getString("jwt"),
-                        "tipo" to json.getString("tipo"),
-                        "timestamp" to System.currentTimeMillis()
-                    )
+                    val pacienteUuid = json.optString("pacienteUuid")
 
-                    val db = FirebaseDatabase.getInstance()
-                    val mensajesRef = db.getReference("Usuarios").child(userId).child("mensajes")
-                    mensajesRef.push().setValue(data)
-                        .addOnSuccessListener {
-                            Log.d("RealtimeDB", "Mensaje guardado correctamente")
+                    if (pacienteUuid.isEmpty()) {
+                        Log.e("RabbitMQ", "Sin pacienteUuid y sin usuario autenticado")
+                        return@runOnUiThread
+                    }
+
+                    val data: Map<String, Any>? = when (tipo) {
+
+                        "SolicitudExpediente" -> mapOf(
+                            "cedulaProfesional" to json.optString("cedulaProfesional"),
+                            "nombre" to json.optString("nombre"),
+                            "tipo" to tipo,
+                            "timestamp" to com.google.firebase.database.ServerValue.TIMESTAMP
+                        )
+
+                        else -> {
+                            Log.w("RabbitMQ", "Tipo desconocido: $tipo")
+                            null
                         }
-                        .addOnFailureListener { e ->
-                            Log.e("RealtimeDB", "Error al guardar mensaje", e)
-                        }
+                    }
+
+                    data?.let {
+                        val ref = FirebaseDatabase.getInstance()
+                            .getReference("Usuarios")
+                            .child(pacienteUuid)
+                            .child("mensajes")
+
+                        ref.push().setValue(it)
+                            .addOnSuccessListener { Log.d("RealtimeDB", "Mensaje guardado") }
+                            .addOnFailureListener { e ->
+                                Log.e(
+                                    "RealtimeDB",
+                                    "Error al guardar",
+                                    e
+                                )
+                            }
+                    }
 
                 } catch (e: Exception) {
-                    Log.e("RabbitMQ", "Error al procesar el mensaje JSON", e)
+                    Log.e("RabbitMQ", "Error procesando JSON", e)
                 }
             }
         }

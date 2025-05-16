@@ -14,6 +14,7 @@ class NotificacionesActivity : AppCompatActivity() {
     private lateinit var adapter: NotificacionesAdapter
     private lateinit var database: DatabaseReference
     private val listaNotificaciones = mutableListOf<String>()
+    private val pacienteActualUuid = FirebaseAuth.getInstance().currentUser?.uid
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +35,6 @@ class NotificacionesActivity : AppCompatActivity() {
             return
         }
 
-        // Acceder a la subcolección de mensajes del usuario actual
         database = FirebaseDatabase.getInstance().getReference("Usuarios").child(uid).child("mensajes")
 
         database.addValueEventListener(object : ValueEventListener {
@@ -43,7 +43,10 @@ class NotificacionesActivity : AppCompatActivity() {
                 for (dato in snapshot.children) {
                     val tipo = dato.child("tipo").getValue(String::class.java)
                     val fecha = dato.child("fecha").getValue(String::class.java)
-                    if (tipo != null && fecha != null) {
+                    val pacienteUuid = dato.child("pacienteUuid").getValue(String::class.java)
+                    val activo = dato.child("activo").getValue(Boolean::class.java) ?: false
+                    
+                    if (tipo != null && fecha != null && activo && pacienteUuid == pacienteActualUuid) {
                         listaNotificaciones.add("$tipo - $fecha")
                     }
                 }
@@ -59,8 +62,6 @@ class NotificacionesActivity : AppCompatActivity() {
             finish()
         }
     }
-
-
 
     private fun aceptarSolicitud(mensaje: String) {
         Log.d("Notificaciones", "Solicitud aceptada: $mensaje")
