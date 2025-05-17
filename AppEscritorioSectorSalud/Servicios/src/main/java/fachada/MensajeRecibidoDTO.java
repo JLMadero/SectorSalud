@@ -98,6 +98,4 @@ public class MensajeRecibidoDTO {
         return "MensajeRecibidoDTO{" + "id=" + id + ", cedulaProfesional=" + cedulaProfesional + ", pacienteUuid=" + pacienteUuid + ", tipoMensaje=" + tipoMensaje + ", nombre=" + nombre + ", fechaCita=" + fechaCita + ", fechaPermiso=" + fechaPermiso + ", respuesta=" + respuesta + '}';
     }
 
-    
-
 }

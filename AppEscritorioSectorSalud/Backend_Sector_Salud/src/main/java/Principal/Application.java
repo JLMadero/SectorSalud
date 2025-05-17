@@ -36,9 +36,11 @@ public class Application {
             // Enviar un mensaje directamente desde el main para probar
             senderService.enviarSolicitudExpediente("247313", "SoIr4DRRA4dmMk8FcDJBvMppOPT2", "Gomez");
             System.out.println("Mensaje enviado a la cola Cliente/Servidor");
-            senderService.enviarAgendarCita("235633", "abcd-1234", "Ficticius", "2025-05-24");
-            //año mes día
-            senderService.enviarRespuestaSolicitud("235633", "abcd-1234", "Ficticio", true, "2025-05-14");
+            
+            senderService.enviarRespuestaSolicitud("123456", "abcd-1234", "Ficticio", true, "2025-05-14 00:00");
+            senderService.enviarAgendarCita("235633", "abcd-1234", "Ficticius", "2025-05-17 09:00");
+//            //formato fecha 2000-00-00 00:00
+//            senderService.enviarRespuestaSolicitud("235633", "abcd-1234", "Ficticio", true, "2025-05-14 00:00");
         };
     }
     

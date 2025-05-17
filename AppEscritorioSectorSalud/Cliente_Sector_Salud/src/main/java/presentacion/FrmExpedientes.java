@@ -1,5 +1,7 @@
 package presentacion;
 
+import fachada.MensajeRecibidoDTO;
+import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import model.Profesional;
 import org.json.JSONArray;
@@ -20,10 +22,12 @@ public class FrmExpedientes extends javax.swing.JFrame {
 
     Profesional profesionalSesion;
     ApiClient apiClient;
+    private List<MensajeRecibidoDTO> mensajes;
 
-    public FrmExpedientes(Profesional profesionalSesion) {
+    public FrmExpedientes(Profesional profesionalSesion, List<MensajeRecibidoDTO> mensajes) {
         initComponents();
         this.profesionalSesion = profesionalSesion;
+        this.mensajes = mensajes;
         lblNombreDoctor.setText("Dr. " + profesionalSesion.getNombre());
         lblCedulaDoctor.setText("Cédula: " + profesionalSesion.getCedula());
         apiClient = new ApiClient();
@@ -109,6 +113,11 @@ public class FrmExpedientes extends javax.swing.JFrame {
         btnCerrarSesion.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         btnCerrarSesion.setText("Cerrar Sesión");
         btnCerrarSesion.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnCerrarSesion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCerrarSesionActionPerformed(evt);
+            }
+        });
 
         btnNotificaciones.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         btnNotificaciones.setText("Notificaciones");
@@ -253,20 +262,28 @@ public class FrmExpedientes extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAgendaCitasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgendaCitasActionPerformed
-        FrmAgendaCitas frmAgendaCitas = new FrmAgendaCitas(profesionalSesion);
+        FrmAgendaCitas frmAgendaCitas = new FrmAgendaCitas(profesionalSesion, mensajes);
         frmAgendaCitas.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnAgendaCitasActionPerformed
 
     private void btnInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInicioActionPerformed
-        FrmPrincipal frmPrincipal = new FrmPrincipal(profesionalSesion);
+        FrmPrincipal frmPrincipal = new FrmPrincipal(profesionalSesion, mensajes);
         frmPrincipal.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnInicioActionPerformed
 
     private void btnNotificacionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNotificacionesActionPerformed
-        // TODO add your handling code here:
+        FrmNotificaciones frmNotificaciones = new FrmNotificaciones(profesionalSesion, mensajes);
+        frmNotificaciones.setVisible(true);
+        dispose();
     }//GEN-LAST:event_btnNotificacionesActionPerformed
+
+    private void btnCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarSesionActionPerformed
+        FrmInicioSesion inicio = new FrmInicioSesion();
+        inicio.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_btnCerrarSesionActionPerformed
 
     private void llenarTabla() {
         DefaultTableModel modelo = new DefaultTableModel(

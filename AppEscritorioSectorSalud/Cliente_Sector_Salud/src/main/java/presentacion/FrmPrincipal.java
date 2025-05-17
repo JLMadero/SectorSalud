@@ -1,16 +1,22 @@
 package presentacion;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import fachada.ContenidoMensaje;
 import fachada.MensajeRecibidoDTO;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 import javax.swing.JOptionPane;
 import model.Profesional;
 
 /**
  *
- * Clase que extiende de Java swing para representar graficamente el menu principal
- * 
+ * Clase que extiende de Java swing para representar graficamente el menu
+ * principal
+ *
  * @author Alejandro Gómez Vega 247313
  * @author Jesus Francisco Tapia Maldonado 245136
  * @author Jose Luis Madero Lopez 244903
@@ -18,7 +24,7 @@ import model.Profesional;
  * @author Diego Alcantar Acosta 247122
  */
 public class FrmPrincipal extends javax.swing.JFrame {
-    
+
     private Profesional profesionalSesion;
     private List<MensajeRecibidoDTO> mensajes;
 
@@ -26,33 +32,46 @@ public class FrmPrincipal extends javax.swing.JFrame {
         initComponents();
         this.profesionalSesion = profesionalSesion;
         this.mensajes = mensajes;
-        
+
         lblNombreDoctor.setText("Dr. " + profesionalSesion.getNombre());
         lblCedulaDoctor.setText("Cédula: " + profesionalSesion.getCedula());
-    }
-    
-    public void mostrarMensajes() {
-        ObjectMapper mapper = new ObjectMapper();
 
-        for (MensajeRecibidoDTO mensaje : mensajes) {
-            try {
-                ContenidoMensaje contenido = mapper.readValue(mensaje.getContenido(), ContenidoMensaje.class);
-                String textoM = "Paciente: " + contenido.getPacienteUuid() + "\nTipo: " + contenido.getTipo();
-                JOptionPane.showMessageDialog(this, textoM, "Nueva notificación", JOptionPane.INFORMATION_MESSAGE);
-            } catch (Exception e) {
-                e.printStackTrace();
-                JOptionPane.showMessageDialog(this, "Error al leer el contenido del mensaje", "Error", JOptionPane.ERROR_MESSAGE);
-            }
+        if (contarNotificaciones() == 0) {
+            lblNotificacionesNuevas.setText("Sin notificaciones nuevas");
+            lblNotificacion1.setText(" ");
+            lblNotificacion2.setText(" ");
+        } else if (contarNotificaciones() == 1) {
+            lblNotificacionesNuevas.setText(contarNotificaciones() + " nueva");
+            lblNotificacion1.setText("- " + mensajes.getLast().getTipoMensaje());
+            lblNotificacion2.setText(" ");
+        } else {
+            lblNotificacionesNuevas.setText(contarNotificaciones() + " nuevas");
+            lblNotificacion1.setText("- " + mensajes.get(mensajes.size() - 2).getTipoMensaje()); // Último mensaje recibido
+            lblNotificacion2.setText("- " + mensajes.get(mensajes.size() - 1).getTipoMensaje()); // Penúltimo mensaje recibido
         }
     }
 
-    public FrmPrincipal(Profesional profesionalSesion) {
-        initComponents();
-        this.profesionalSesion = profesionalSesion;
-        lblNombreDoctor.setText("Dr. " + profesionalSesion.getNombre());
-        lblCedulaDoctor.setText("Cédula: " + profesionalSesion.getCedula());
+    public int contarNotificaciones() {
+        int cantidadN = 0;
+        for (MensajeRecibidoDTO mensaje : mensajes) {
+            cantidadN += 1;
+        }
+        return cantidadN;
     }
 
+    public void mostrarMensajes() {
+        for (MensajeRecibidoDTO mensaje : mensajes) {
+            String textoM = "Paciente: " + mensaje.getNombre() + "\nTipo: " + mensaje.getTipoMensaje();
+            JOptionPane.showMessageDialog(this, textoM, "Nueva notificación", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+
+//    public FrmPrincipal(Profesional profesionalSesion) {
+//        initComponents();
+//        this.profesionalSesion = profesionalSesion;
+//        lblNombreDoctor.setText("Dr. " + profesionalSesion.getNombre());
+//        lblCedulaDoctor.setText("Cédula: " + profesionalSesion.getCedula());
+//    }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -136,6 +155,11 @@ public class FrmPrincipal extends javax.swing.JFrame {
         btnNotificaciones.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         btnNotificaciones.setText("Notificaciones");
         btnNotificaciones.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnNotificaciones.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNotificacionesActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -216,6 +240,11 @@ public class FrmPrincipal extends javax.swing.JFrame {
         btnVerAgenda.setText("Ver Agenda");
         btnVerAgenda.setBorderPainted(false);
         btnVerAgenda.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnVerAgenda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVerAgendaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelCitasLayout = new javax.swing.GroupLayout(panelCitas);
         panelCitas.setLayout(panelCitasLayout);
@@ -277,6 +306,11 @@ public class FrmPrincipal extends javax.swing.JFrame {
         btnVerTodas.setText("Ver Todas");
         btnVerTodas.setBorderPainted(false);
         btnVerTodas.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnVerTodas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVerTodasActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelNotificacionesLayout = new javax.swing.GroupLayout(panelNotificaciones);
         panelNotificaciones.setLayout(panelNotificacionesLayout);
@@ -306,7 +340,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 .addComponent(lblNotificacion1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblNotificacion2)
-                .addGap(18, 18, 18)
+                .addGap(24, 24, 24)
                 .addComponent(btnVerTodas)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -390,13 +424,13 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnExpedientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExpedientesActionPerformed
-        FrmExpedientes frmExpedientes = new FrmExpedientes(profesionalSesion);
+        FrmExpedientes frmExpedientes = new FrmExpedientes(profesionalSesion, mensajes);
         frmExpedientes.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnExpedientesActionPerformed
 
     private void btnAgendaCitasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgendaCitasActionPerformed
-        FrmAgendaCitas frmAgendaCitas = new FrmAgendaCitas(profesionalSesion);
+        FrmAgendaCitas frmAgendaCitas = new FrmAgendaCitas(profesionalSesion, mensajes);
         frmAgendaCitas.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnAgendaCitasActionPerformed
@@ -406,6 +440,24 @@ public class FrmPrincipal extends javax.swing.JFrame {
         inicio.setVisible(true);
         dispose();
     }//GEN-LAST:event_btnCerrarSesionActionPerformed
+
+    private void btnNotificacionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNotificacionesActionPerformed
+        FrmNotificaciones frmNotificaciones = new FrmNotificaciones(profesionalSesion, mensajes);
+        frmNotificaciones.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_btnNotificacionesActionPerformed
+
+    private void btnVerAgendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerAgendaActionPerformed
+        FrmAgendaCitas frmAgendaCitas = new FrmAgendaCitas(profesionalSesion, mensajes);
+        frmAgendaCitas.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnVerAgendaActionPerformed
+
+    private void btnVerTodasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerTodasActionPerformed
+        FrmNotificaciones frmNotificaciones = new FrmNotificaciones(profesionalSesion, mensajes);
+        frmNotificaciones.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_btnVerTodasActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgendaCitas;
