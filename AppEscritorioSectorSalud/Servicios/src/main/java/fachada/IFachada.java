@@ -17,4 +17,5 @@ public interface IFachada {
     public boolean iniciarSesion(String cedula);
     public List<MensajeRecibidoDTO> obtenerMensajesPorCedula(String cedula);
     Profesional obtenerProfesional(String cedula);
+    public boolean enviarMensajeSolicitud(String cedula, String paciente, String nombre);
 }

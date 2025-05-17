@@ -30,16 +30,16 @@ public class Application {
     }
 
     // Este método será ejecutado al iniciar la aplicación
-    @Bean
-    public CommandLineRunner demo(RabbitMQSenderService senderService) {
-        return (args) -> {
-            // Enviar un mensaje directamente desde el main para probar
-            senderService.enviarSolicitudExpediente("247313", "SoIr4DRRA4dmMk8FcDJBvMppOPT2", "Gomez");
-            System.out.println("Mensaje enviado a la cola Cliente/Servidor");
-            senderService.enviarAgendarCita("235633", "abcd-1234", "Ficticius", "2025-05-24");
-            //año mes día
-            senderService.enviarRespuestaSolicitud("235633", "abcd-1234", "Ficticio", true, "2025-05-14");
-        };
-    }
+//    @Bean
+//    public CommandLineRunner demo(RabbitMQSenderService senderService) {
+//        return (args) -> {
+//            // Enviar un mensaje directamente desde el main para probar
+//            senderService.enviarSolicitudExpediente("247313", "SoIr4DRRA4dmMk8FcDJBvMppOPT2", "Gomez");
+//            System.out.println("Mensaje enviado a la cola Cliente/Servidor");
+//            senderService.enviarAgendarCita("235633", "abcd-1234", "Ficticius", "2025-05-24");
+//            //año mes día
+//            senderService.enviarRespuestaSolicitud("235633", "abcd-1234", "Ficticio", true, "2025-05-14");
+//        };
+//    }
     
 }

@@ -15,8 +15,8 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 public class ApiClient {
-    HttpClient client = HttpClient.newHttpClient();
-    private String url="https://pruebaapi-sv1q.onrender.com/api/expedientes";
+    private final HttpClient client = HttpClient.newHttpClient();
+    private final String url = "https://pruebaapi-sv1q.onrender.com/api";
     
     public String getExpedientes() throws IOException, InterruptedException{
         HttpRequest request = HttpRequest.newBuilder()
@@ -27,11 +27,15 @@ public class ApiClient {
         return response.body();
     }
     
-    public String getExpedientePorId(String id) throws IOException, InterruptedException{
+     public String getExpedientePorId(String idPaciente, String cedulaProfesional) throws IOException, InterruptedException {
+        // Ajusta los nombres de los parámetros a los que tu API espera: idDocto y idPaciente
+        String endpoint = String.format("%s/expediente?idDoctor=%s&idPaciente=%s", url, cedulaProfesional, idPaciente);
+
         HttpRequest request = HttpRequest.newBuilder()
-            .uri(URI.create(url+"/"+id))
+            .uri(URI.create(endpoint))
             .GET()
             .build();
+
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         return response.body();
     }
