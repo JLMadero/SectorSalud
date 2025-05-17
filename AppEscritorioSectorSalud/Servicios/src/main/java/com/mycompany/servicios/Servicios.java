@@ -21,10 +21,10 @@ import java.util.List;
             f.insercion();
 
             System.out.println(f.iniciarSesion("244903"));
-        List<MensajeRecibidoDTO> mensajes = f.obtenerMensajesPorCedula("12345");
+        List<MensajeRecibidoDTO> mensajes = f.obtenerMensajesPorCedula("235633");
 
         for (MensajeRecibidoDTO mensaje : mensajes) {
-            System.out.println(mensaje.getContenido());
+            System.out.println(mensaje);
         }
         }
     }

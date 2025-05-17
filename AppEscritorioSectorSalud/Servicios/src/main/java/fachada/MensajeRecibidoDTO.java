@@ -4,15 +4,37 @@
  */
 package fachada;
 
+import java.time.LocalDate;
+
 /**
  *
  * @author jl4ma
  */
 public class MensajeRecibidoDTO {
+
     private Long id;
+
     private String cedulaProfesional;
+
+    private String pacienteUuid;
+
     private String tipoMensaje;
-    private String contenido;
+
+    private String nombre;
+
+    private LocalDate fechaCita;
+
+    private LocalDate fechaPermiso;
+
+    private boolean respuesta;
+    
+    public String getCedulaProfesional() {
+        return cedulaProfesional;
+    }
+
+    public void setCedulaProfesional(String cedulaProfesional) {
+        this.cedulaProfesional = cedulaProfesional;
+    }
 
     public Long getId() {
         return id;
@@ -22,12 +44,12 @@ public class MensajeRecibidoDTO {
         this.id = id;
     }
 
-    public String getCedulaProfesional() {
-        return cedulaProfesional;
+    public String getPacienteUuid() {
+        return pacienteUuid;
     }
 
-    public void setCedulaProfesional(String cedulaProfesional) {
-        this.cedulaProfesional = cedulaProfesional;
+    public void setPacienteUuid(String pacienteUuid) {
+        this.pacienteUuid = pacienteUuid;
     }
 
     public String getTipoMensaje() {
@@ -38,11 +60,41 @@ public class MensajeRecibidoDTO {
         this.tipoMensaje = tipoMensaje;
     }
 
-    public String getContenido() {
-        return contenido;
+    public String getNombre() {
+        return nombre;
     }
 
-    public void setContenido(String contenido) {
-        this.contenido = contenido;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
+
+    public LocalDate getFechaCita() {
+        return fechaCita;
+    }
+
+    public void setFechaCita(LocalDate fechaCita) {
+        this.fechaCita = fechaCita;
+    }
+
+    public LocalDate getFechaPermiso() {
+        return fechaPermiso;
+    }
+
+    public void setFechaPermiso(LocalDate fechaPermiso) {
+        this.fechaPermiso = fechaPermiso;
+    }
+
+    public boolean isRespuesta() {
+        return respuesta;
+    }
+
+    public void setRespuesta(boolean respuesta) {
+        this.respuesta = respuesta;
+    }
+
+    @Override
+    public String toString() {
+        return "MensajeRecibidoDTO{" + "id=" + id + ", cedulaProfesional=" + cedulaProfesional + ", pacienteUuid=" + pacienteUuid + ", tipoMensaje=" + tipoMensaje + ", nombre=" + nombre + ", fechaCita=" + fechaCita + ", fechaPermiso=" + fechaPermiso + ", respuesta=" + respuesta + '}';
+    }
+
 }

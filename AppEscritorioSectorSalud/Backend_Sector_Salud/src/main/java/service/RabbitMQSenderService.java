@@ -27,35 +27,35 @@ public class RabbitMQSenderService {
         // Envío del mensaje a RabbitMQ
         rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE_NAME, RabbitMQConfig.EXPEDIENTE_ROUTING_KEY, mensaje);
     }
-//    public void enviarAgendarCita(String cedulaProfesional, String pacienteUuid, String nombre, String fecha) {
-//        String mensaje = String.format(
-//            "{" +
-//            "\"tipo\":\"AgendarCita\"," +
-//            "\"nombre\":\"%s\"," +
-//            "\"idProfesional\":\"%s\"," +
-//            "\"idPaciente\":\"%s\"," +
-//            "\"fecha\":\"%s\"" +
-//            "}",
-//            nombre, cedulaProfesional, pacienteUuid, fecha
-//        );
-//
-//        rabbitTemplate.convertAndSend(RabbitMQConfigListener.EXCHANGE_NAME, RabbitMQConfigListener.EXPEDIENTE_ROUTING_KEY, mensaje);
-//    }
-//
-//    public void enviarRespuestaSolicitud(String cedulaProfesional, String pacienteUuid, String nombre, boolean respuesta, String fechaPermiso) {
-//        String mensaje = String.format(
-//            "{" +
-//            "\"tipo\":\"RespuestaSolicitud\"," +
-//            "\"nombre\":\"%s\"," +
-//            "\"idProfesional\":\"%s\"," +
-//            "\"idPaciente\":\"%s\"," +
-//            "\"respuesta\":\"%s\"," +
-//            "\"fechaPermiso\":\"%s\"" +
-//            "}",
-//            nombre, cedulaProfesional, pacienteUuid, String.valueOf(respuesta), fechaPermiso
-//        );
-//
-//        rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE_NAME, RabbitMQConfig.EXPEDIENTE_ROUTING_KEY, mensaje);
-//    }
+    public void enviarAgendarCita(String cedulaProfesional, String pacienteUuid, String nombre, String fecha) {
+        String mensaje = String.format(
+            "{" +
+            "\"tipo\":\"AgendarCita\"," +
+            "\"nombre\":\"%s\"," +
+            "\"idProfesional\":\"%s\"," +
+            "\"idPaciente\":\"%s\"," +
+            "\"fecha\":\"%s\"" +
+            "}",
+            nombre, cedulaProfesional, pacienteUuid, fecha
+        );
+
+        rabbitTemplate.convertAndSend(RabbitMQConfigListener.EXCHANGE_NAME, RabbitMQConfigListener.EXPEDIENTE_ROUTING_KEY, mensaje);
+    }
+
+    public void enviarRespuestaSolicitud(String cedulaProfesional, String pacienteUuid, String nombre, boolean respuesta, String fechaPermiso) {
+        String mensaje = String.format(
+            "{" +
+            "\"tipo\":\"RespuestaSolicitud\"," +
+            "\"nombre\":\"%s\"," +
+            "\"idProfesional\":\"%s\"," +
+            "\"idPaciente\":\"%s\"," +
+            "\"respuesta\":\"%s\"," +
+            "\"fechaPermiso\":\"%s\"" +
+            "}",
+            nombre, cedulaProfesional, pacienteUuid, String.valueOf(respuesta), fechaPermiso
+        );
+
+        rabbitTemplate.convertAndSend(RabbitMQConfigListener.EXCHANGE_NAME, RabbitMQConfigListener.EXPEDIENTE_ROUTING_KEY, mensaje);
+    }
 }
 
