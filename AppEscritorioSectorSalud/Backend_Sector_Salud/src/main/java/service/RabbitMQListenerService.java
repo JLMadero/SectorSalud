@@ -6,6 +6,7 @@
 //
     import com.fasterxml.jackson.databind.JsonNode;
     import com.fasterxml.jackson.databind.ObjectMapper;
+import java.text.SimpleDateFormat;
     import java.time.LocalDate;
     import java.time.format.DateTimeFormatter;
     import java.util.Date;
@@ -33,7 +34,8 @@ import rabbitConfig.RabbitMQConfigListener;
 
         @RabbitListener(queues = RabbitMQConfigListener.CLIENTE_SERVIDOR_QUEUE)
         public void recibirMensajes(String mensajeJson) {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
             try {
                 MensajeRecibido mensaje = new MensajeRecibido();
                 JsonNode root = objectMapper.readTree(mensajeJson);
@@ -51,7 +53,7 @@ import rabbitConfig.RabbitMQConfigListener;
                     // Extraer y parsear fecha
                     String fecha = root.get("fecha").asText();
                      // ajusta según tu formato
-                    LocalDate fechaCita = LocalDate.parse(fecha, formatter);
+                    Date fechaCita = sdf.parse(fecha);
 
                     // Guardar mensaje
                     mensaje.setFechaCita(fechaCita);
@@ -78,7 +80,7 @@ import rabbitConfig.RabbitMQConfigListener;
                     boolean resultado = Boolean.parseBoolean(respuesta);
                     if (resultado) {
                     String fecha = root.get("fechaPermiso").asText();
-                    LocalDate fechaCita = LocalDate.parse(fecha, formatter);
+                    Date fechaCita = sdf.parse(fecha);
                     mensaje.setFechaPermiso(fechaCita);
                     }
                     mensaje.setRespuesta(resultado);

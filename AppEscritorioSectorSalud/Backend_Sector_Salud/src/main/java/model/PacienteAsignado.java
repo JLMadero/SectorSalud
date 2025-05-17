@@ -28,6 +28,7 @@ public class PacienteAsignado {
     private String profesionalCedula;
     
     private String nombre;
+    private Date fecha;
 
     public String getNombre() {
         return nombre;
@@ -37,7 +38,7 @@ public class PacienteAsignado {
         this.nombre = nombre;
     }
     
-    private LocalDate fecha;
+    
 
     public Long getId() {
         return id;
@@ -63,11 +64,11 @@ public class PacienteAsignado {
         this.profesionalCedula = profesionalCedula;
     }
 
-    public LocalDate getFecha() {
+    public Date getFecha() {
         return fecha;
     }
 
-    public void setFecha(LocalDate fecha) {
+    public void setFecha(Date fecha) {
         this.fecha = fecha;
     }
 }

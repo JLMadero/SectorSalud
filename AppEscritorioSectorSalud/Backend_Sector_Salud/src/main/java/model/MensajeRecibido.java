@@ -10,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Date;
 
 /**
  *
@@ -30,9 +31,9 @@ public class MensajeRecibido {
 
     private String nombre;
     
-    private LocalDate fechaCita;
+    private Date fechaCita;
     
-    private LocalDate fechaPermiso;
+    private Date fechaPermiso;
     
     private boolean respuesta;
 
@@ -68,19 +69,19 @@ public class MensajeRecibido {
         this.nombre = nombre;
     }
 
-    public LocalDate getFechaCita() {
+    public Date getFechaCita() {
         return fechaCita;
     }
 
-    public void setFechaCita(LocalDate fechaCita) {
+    public void setFechaCita(Date fechaCita) {
         this.fechaCita = fechaCita;
     }
 
-    public LocalDate getFechaPermiso() {
+    public Date getFechaPermiso() {
         return fechaPermiso;
     }
 
-    public void setFechaPermiso(LocalDate fechaPermiso) {
+    public void setFechaPermiso(Date fechaPermiso) {
         this.fechaPermiso = fechaPermiso;
     }
 

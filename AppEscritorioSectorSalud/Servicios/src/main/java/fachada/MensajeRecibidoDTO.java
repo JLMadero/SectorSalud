@@ -5,6 +5,7 @@
 package fachada;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 /**
  *
@@ -22,9 +23,9 @@ public class MensajeRecibidoDTO {
 
     private String nombre;
 
-    private LocalDate fechaCita;
+    private Date fechaCita;
 
-    private LocalDate fechaPermiso;
+    private Date fechaPermiso;
 
     private boolean respuesta;
     
@@ -68,19 +69,19 @@ public class MensajeRecibidoDTO {
         this.nombre = nombre;
     }
 
-    public LocalDate getFechaCita() {
+    public Date getFechaCita() {
         return fechaCita;
     }
 
-    public void setFechaCita(LocalDate fechaCita) {
+    public void setFechaCita(Date fechaCita) {
         this.fechaCita = fechaCita;
     }
 
-    public LocalDate getFechaPermiso() {
+    public Date getFechaPermiso() {
         return fechaPermiso;
     }
 
-    public void setFechaPermiso(LocalDate fechaPermiso) {
+    public void setFechaPermiso(Date fechaPermiso) {
         this.fechaPermiso = fechaPermiso;
     }
 
@@ -96,5 +97,7 @@ public class MensajeRecibidoDTO {
     public String toString() {
         return "MensajeRecibidoDTO{" + "id=" + id + ", cedulaProfesional=" + cedulaProfesional + ", pacienteUuid=" + pacienteUuid + ", tipoMensaje=" + tipoMensaje + ", nombre=" + nombre + ", fechaCita=" + fechaCita + ", fechaPermiso=" + fechaPermiso + ", respuesta=" + respuesta + '}';
     }
+
+    
 
 }
