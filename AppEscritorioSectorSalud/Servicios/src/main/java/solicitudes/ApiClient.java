@@ -39,4 +39,17 @@ public class ApiClient {
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         return response.body();
     }
+
+    public String getPacientesAsignados(String cedulaProfesional) throws IOException, InterruptedException {
+        String endpoint = String.format("%s/asignados?cedula=%s", url, cedulaProfesional);
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(endpoint))
+                .GET()
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        return response.body();
+    }
+
 }

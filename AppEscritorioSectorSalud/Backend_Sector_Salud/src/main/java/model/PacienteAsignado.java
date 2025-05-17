@@ -37,8 +37,6 @@ public class PacienteAsignado {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-    
-    
 
     public Long getId() {
         return id;

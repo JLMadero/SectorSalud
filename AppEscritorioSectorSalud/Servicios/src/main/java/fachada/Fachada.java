@@ -117,7 +117,6 @@ public class Fachada implements IFachada {
     }
 }
 
-
     @Override
     public Profesional obtenerProfesional(String cedula) {
         return pro.getProfesionalCedula(cedula);

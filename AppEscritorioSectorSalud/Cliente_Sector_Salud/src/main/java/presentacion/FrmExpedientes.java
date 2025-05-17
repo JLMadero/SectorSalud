@@ -31,7 +31,7 @@ public class FrmExpedientes extends javax.swing.JFrame {
         lblNombreDoctor.setText("Dr. " + profesionalSesion.getNombre());
         lblCedulaDoctor.setText("Cédula: " + profesionalSesion.getCedula());
         apiClient = new ApiClient();
-        llenarTabla();
+        //llenarTabla();
     }
 
     @SuppressWarnings("unchecked")
@@ -56,6 +56,9 @@ public class FrmExpedientes extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         tablaExpedientes = new javax.swing.JTable();
+        btnSolicitar = new javax.swing.JButton();
+        btnVer = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -201,14 +204,22 @@ public class FrmExpedientes extends javax.swing.JFrame {
         ));
         jScrollPane2.setViewportView(tablaExpedientes);
 
+        btnSolicitar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnSolicitar.setText("Solicitar Expediente");
+        btnSolicitar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+
+        btnVer.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnVer.setText("Ver Expediente");
+        btnVer.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel2.setText("Pacientes asignados");
+
         javax.swing.GroupLayout panelRound1Layout = new javax.swing.GroupLayout(panelRound1);
         panelRound1.setLayout(panelRound1Layout);
         panelRound1Layout.setHorizontalGroup(
             panelRound1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelRound1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jSeparator1)
-                .addContainerGap())
             .addGroup(panelRound1Layout.createSequentialGroup()
                 .addGap(21, 21, 21)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -218,9 +229,24 @@ public class FrmExpedientes extends javax.swing.JFrame {
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(panelRound1Layout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 578, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addGroup(panelRound1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelRound1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jSeparator1))
+                    .addGroup(panelRound1Layout.createSequentialGroup()
+                        .addGroup(panelRound1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelRound1Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(btnSolicitar)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnVer))
+                            .addGroup(panelRound1Layout.createSequentialGroup()
+                                .addGap(21, 21, 21)
+                                .addGroup(panelRound1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 578, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(0, 15, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         panelRound1Layout.setVerticalGroup(
             panelRound1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -233,8 +259,14 @@ public class FrmExpedientes extends javax.swing.JFrame {
                         .addComponent(txtBuscarExpediente, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 395, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 328, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(panelRound1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnSolicitar)
+                    .addComponent(btnVer))
                 .addContainerGap(25, Short.MAX_VALUE))
         );
 
@@ -252,7 +284,7 @@ public class FrmExpedientes extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(31, 31, 31)
                 .addComponent(panelRound1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(28, Short.MAX_VALUE))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 0, 650, 550));
@@ -284,49 +316,50 @@ public class FrmExpedientes extends javax.swing.JFrame {
         inicio.setVisible(true);
         dispose();
     }//GEN-LAST:event_btnCerrarSesionActionPerformed
-
-    private void llenarTabla() {
-        DefaultTableModel modelo = new DefaultTableModel(
-                new Object[][]{},
-                new String[]{"ID", "Paciente ID", "Alergias", "Notas adicionales"}
-        ) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-
-        try {
-            String jsonResponse = apiClient.getExpedientes();
-            JSONArray expedientesArray = new JSONArray(jsonResponse);
-
-            for (int i = 0; i < expedientesArray.length(); i++) {
-                JSONObject expediente = expedientesArray.getJSONObject(i);
-
-                String id = expediente.getString("id");
-                String pacienteId = expediente.getString("pacienteId");
-
-                JSONArray alergiasArray = expediente.getJSONArray("alergias");
-                StringBuilder alergiasStr = new StringBuilder();
-                for (int j = 0; j < alergiasArray.length(); j++) {
-                    alergiasStr.append(alergiasArray.getString(j));
-                    if (j < alergiasArray.length() - 1) {
-                        alergiasStr.append(", ");
-                    }
-                }
-
-                String notas = expediente.optString("notasAdicionales", "");
-
-                modelo.addRow(new Object[]{id, pacienteId, alergiasStr.toString(), notas});
-            }
-
-        } catch (Exception e) {
-            System.err.println("Error al cargar expedientes: " + e.getMessage());
-        }
-
-        tablaExpedientes.setModel(modelo);
-        tablaExpedientes.setRowHeight(30);
-    }
+    
+    
+//    private void llenarTabla() {
+//        DefaultTableModel modelo = new DefaultTableModel(
+//                new Object[][]{},
+//                new String[]{"ID", "Paciente ID", "Alergias", "Notas adicionales"}
+//        ) {
+//            @Override
+//            public boolean isCellEditable(int row, int column) {
+//                return false;
+//            }
+//        };
+//
+//        try {
+//            String jsonResponse = apiClient.getExpedientes();
+//            JSONArray expedientesArray = new JSONArray(jsonResponse);
+//
+//            for (int i = 0; i < expedientesArray.length(); i++) {
+//                JSONObject expediente = expedientesArray.getJSONObject(i);
+//
+//                String id = expediente.getString("id");
+//                String pacienteId = expediente.getString("pacienteId");
+//
+//                JSONArray alergiasArray = expediente.getJSONArray("alergias");
+//                StringBuilder alergiasStr = new StringBuilder();
+//                for (int j = 0; j < alergiasArray.length(); j++) {
+//                    alergiasStr.append(alergiasArray.getString(j));
+//                    if (j < alergiasArray.length() - 1) {
+//                        alergiasStr.append(", ");
+//                    }
+//                }
+//
+//                String notas = expediente.optString("notasAdicionales", "");
+//
+//                modelo.addRow(new Object[]{id, pacienteId, alergiasStr.toString(), notas});
+//            }
+//
+//        } catch (Exception e) {
+//            System.err.println("Error al cargar expedientes: " + e.getMessage());
+//        }
+//
+//        tablaExpedientes.setModel(modelo);
+//        tablaExpedientes.setRowHeight(30);
+//    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgendaCitas;
@@ -334,8 +367,11 @@ public class FrmExpedientes extends javax.swing.JFrame {
     private javax.swing.JButton btnExpedientes;
     private javax.swing.JButton btnInicio;
     private javax.swing.JButton btnNotificaciones;
+    private javax.swing.JButton btnSolicitar;
+    private javax.swing.JButton btnVer;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
