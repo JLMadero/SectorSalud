@@ -18,4 +18,5 @@ public interface IFachada {
     public List<MensajeRecibidoDTO> obtenerMensajesPorCedula(String cedula);
     Profesional obtenerProfesional(String cedula);
     public boolean enviarMensajeSolicitud(String cedula, String paciente, String nombre);
+    public boolean eliminarMensaje(Long id);
 }

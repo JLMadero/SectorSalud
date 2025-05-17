@@ -87,6 +87,30 @@ public class Fachada implements IFachada {
     }
     
     @Override
+public boolean eliminarMensaje(Long id) {
+    try {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:8080/api/mensajes/" + id))
+                .DELETE()
+                .build();
+
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+        // Acepta 200 (OK) o 204 (No Content) como éxito
+        if (response.statusCode() == 200 || response.statusCode() == 204) {
+            return true;
+        } else {
+            System.err.println("Error al eliminar el mensaje. Código de respuesta: " + response.statusCode());
+            return false;
+        }
+
+    } catch (IOException | InterruptedException e) {
+        e.printStackTrace();
+        return false;
+    }
+}
+    
+    @Override
     public boolean enviarMensajeSolicitud(String cedula, String paciente, String nombre) {
     try {
         // Construir los parámetros en formato application/x-www-form-urlencoded
