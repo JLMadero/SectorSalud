@@ -24,18 +24,18 @@ public class ProfesionalControlador {
     private final ExpedienteService expedienteService;
 
     // Endpoint para enviar la solicitud de expediente
-//    @PostMapping("/solicitar-expediente")
-//    public ResponseEntity<String> solicitarExpediente(@RequestParam String cedulaProfesional,
-//                                                      @RequestParam String pacienteUuid, 
-//                                                      @RequestParam String nombre) {
-//        try {
-//            senderService.enviarSolicitudExpediente(cedulaProfesional, pacienteUuid, nombre);
-//            return ResponseEntity.ok("Solicitud de expediente enviada correctamente");
-//        } catch (Exception e) {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-//                    .body("Error al enviar solicitud de expediente: " + e.getMessage());
-//        }
-//    }
+    @PostMapping("/solicitar-expediente")
+    public ResponseEntity<String> solicitarExpediente(@RequestParam String cedulaProfesional,
+                                                      @RequestParam String pacienteUuid, 
+                                                      @RequestParam String nombre) {
+        try {
+            senderService.enviarSolicitudExpediente(cedulaProfesional, pacienteUuid, nombre);
+            return ResponseEntity.ok("Solicitud de expediente enviada correctamente");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al enviar solicitud de expediente: " + e.getMessage());
+        }
+    }
 
     // Endpoint para ver el expediente
     @GetMapping("/ver-expediente/{pacienteId}")

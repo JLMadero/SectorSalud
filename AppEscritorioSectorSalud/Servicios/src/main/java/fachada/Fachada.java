@@ -11,9 +11,11 @@ import conexion.Conexion;
 import conexion.IConexion;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
 import model.Profesional;
@@ -83,6 +85,38 @@ public class Fachada implements IFachada {
             return Collections.emptyList();
         }
     }
+    
+    @Override
+    public boolean enviarMensajeSolicitud(String cedula, String paciente, String nombre) {
+    try {
+        // Construir los parámetros en formato application/x-www-form-urlencoded
+        String requestBody = "cedulaProfesional=" + URLEncoder.encode(cedula, StandardCharsets.UTF_8)
+                           + "&pacienteUuid=" + URLEncoder.encode(paciente, StandardCharsets.UTF_8)
+                           + "&nombre=" + URLEncoder.encode(nombre, StandardCharsets.UTF_8);
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:8080/profesional/solicitar-expediente"))
+                .header("Content-Type", "application/x-www-form-urlencoded")
+                .POST(HttpRequest.BodyPublishers.ofString(requestBody))
+                .build();
+
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+        // Verifica si fue exitosa la solicitud (HTTP 200)
+        if (response.statusCode() == 200) {
+            System.out.println("Solicitud enviada exitosamente: " + response.body());
+            return true;
+        } else {
+            System.err.println("Error al enviar la solicitud. Código de respuesta: " + response.statusCode());
+            return false;
+        }
+
+    } catch (IOException | InterruptedException e) {
+        e.printStackTrace();
+        return false;
+    }
+}
+
 
     @Override
     public Profesional obtenerProfesional(String cedula) {

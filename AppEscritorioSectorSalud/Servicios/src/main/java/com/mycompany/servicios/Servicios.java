@@ -7,7 +7,9 @@ package com.mycompany.servicios;
 import fachada.Fachada;
 import fachada.IFachada;
 import fachada.MensajeRecibidoDTO;
+import java.io.IOException;
 import java.util.List;
+import solicitudes.ApiClient;
 
 /**
  *
@@ -15,7 +17,7 @@ import java.util.List;
  */
     public class Servicios {
 
-        public static void main(String[] args) {
+        public static void main(String[] args) throws IOException, InterruptedException {
 
             IFachada f = new Fachada();
             f.insercion();
@@ -26,5 +28,20 @@ import java.util.List;
         for (MensajeRecibidoDTO mensaje : mensajes) {
             System.out.println(mensaje);
         }
+        
+        ApiClient cliente = new ApiClient();
+        String expediente = cliente.getExpedientePorId("V2fDWB1zSeMunfkwI4MeSS3PESk1", "asdas");
+        if(expediente.isBlank()){
+            System.out.println("No tienes permiso");
+        }else{
+            System.out.println(expediente);
         }
+        if(f.enviarMensajeSolicitud("244903", "12345", "Dr. Madero")){
+            System.out.println("Se envio");
+        }else{
+            System.out.println("No se envio");
+        }
+        }
+        
+        
     }
