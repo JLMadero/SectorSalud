@@ -1,6 +1,9 @@
 package presentacion;
 
+import fachada.Fachada;
+import fachada.IFachada;
 import fachada.MensajeRecibidoDTO;
+import fachada.PacienteAsignadoDTO;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import model.Profesional;
@@ -22,8 +25,10 @@ public class FrmExpedientes extends javax.swing.JFrame {
 
     Profesional profesionalSesion;
     ApiClient apiClient;
+    IFachada fachada;
     private List<MensajeRecibidoDTO> mensajes;
-
+    private List<PacienteAsignadoDTO> pacientesAsignados;
+    
     public FrmExpedientes(Profesional profesionalSesion, List<MensajeRecibidoDTO> mensajes) {
         initComponents();
         this.profesionalSesion = profesionalSesion;
@@ -31,9 +36,24 @@ public class FrmExpedientes extends javax.swing.JFrame {
         lblNombreDoctor.setText("Dr. " + profesionalSesion.getNombre());
         lblCedulaDoctor.setText("Cédula: " + profesionalSesion.getCedula());
         apiClient = new ApiClient();
-        //llenarTabla();
+        fachada = new Fachada();
+        pacientesAsignados = fachada.obtenerPacientesAsignados(profesionalSesion.getCedula());
+        llenarTabla(pacientesAsignados);
     }
-
+    
+    private void llenarTabla(List<PacienteAsignadoDTO> pacientesAsignados){
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.addColumn("ID paciente");
+        modelo.addColumn("Nombre paciente");
+        
+        for (PacienteAsignadoDTO pacientesAsignado : pacientesAsignados) {
+            String idPaciente = pacientesAsignado.getPacienteUuid();
+            String nombrePaciente = pacientesAsignado.getNombre();
+            modelo.addRow(new Object[]{idPaciente, nombrePaciente});
+        }
+        tablaExpedientes.setModel(modelo);
+    }
+ 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -316,8 +336,7 @@ public class FrmExpedientes extends javax.swing.JFrame {
         inicio.setVisible(true);
         dispose();
     }//GEN-LAST:event_btnCerrarSesionActionPerformed
-    
-    
+     
 //    private void llenarTabla() {
 //        DefaultTableModel modelo = new DefaultTableModel(
 //                new Object[][]{},

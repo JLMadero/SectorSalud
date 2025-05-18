@@ -1,13 +1,7 @@
 package presentacion;
 
 import fachada.MensajeRecibidoDTO;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Iterator;
+import fachada.PacienteAsignadoDTO;
 import java.util.List;
 import javax.swing.JOptionPane;
 import model.Profesional;
@@ -50,7 +44,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
             lblNotificacion2.setText("- " + mensajes.get(mensajes.size() - 1).getTipoMensaje()); // Penúltimo mensaje recibido
         }
     }
-
+    
     public int contarNotificaciones() {
         int cantidadN = 0;
         for (MensajeRecibidoDTO mensaje : mensajes) {

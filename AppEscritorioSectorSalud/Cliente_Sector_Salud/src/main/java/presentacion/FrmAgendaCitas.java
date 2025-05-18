@@ -194,6 +194,7 @@ public class FrmAgendaCitas extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tablaCitas.setEnabled(false);
         jScrollPane2.setViewportView(tablaCitas);
 
         javax.swing.GroupLayout panelRound1Layout = new javax.swing.GroupLayout(panelRound1);
