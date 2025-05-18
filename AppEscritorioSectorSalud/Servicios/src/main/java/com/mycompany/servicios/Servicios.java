@@ -20,27 +20,33 @@ import solicitudes.ApiClient;
         public static void main(String[] args) throws IOException, InterruptedException {
 
             IFachada f = new Fachada();
-            f.insercion();
+//            f.insercion();
+//
+//            System.out.println(f.iniciarSesion("244903"));
+//        List<MensajeRecibidoDTO> mensajes = f.obtenerMensajesPorCedula("235633");
+//
+//        for (MensajeRecibidoDTO mensaje : mensajes) {
+//            System.out.println(mensaje);
+//        }
+//        
+//        ApiClient cliente = new ApiClient();
+//        String expediente = cliente.getExpedientePorId("V2fDWB1zSeMunfkwI4MeSS3PESk1", "asdas");
+//        if(expediente.isBlank()){
+//            System.out.println("No tienes permiso");
+//        }else{
+//            System.out.println(expediente);
+//        }
+//        if(f.enviarMensajeSolicitud("244903", "12345", "Dr. Madero")){
+//            System.out.println("Se envio");
+//        }else{
+//            System.out.println("No se envio");
+//        }
 
-            System.out.println(f.iniciarSesion("244903"));
-        List<MensajeRecibidoDTO> mensajes = f.obtenerMensajesPorCedula("235633");
-
-        for (MensajeRecibidoDTO mensaje : mensajes) {
-            System.out.println(mensaje);
-        }
-        
-        ApiClient cliente = new ApiClient();
-        String expediente = cliente.getExpedientePorId("V2fDWB1zSeMunfkwI4MeSS3PESk1", "asdas");
-        if(expediente.isBlank()){
-            System.out.println("No tienes permiso");
-        }else{
-            System.out.println(expediente);
-        }
-        if(f.enviarMensajeSolicitud("244903", "12345", "Dr. Madero")){
-            System.out.println("Se envio");
-        }else{
-            System.out.println("No se envio");
-        }
+          if(f.eliminarMensaje(7L)){
+              System.out.println("Eliminado");
+          }else{
+              System.out.println("No se elimino");
+          }
         }
         
         

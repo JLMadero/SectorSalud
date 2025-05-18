@@ -52,5 +52,43 @@ public class ApiClient {
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         return response.body();
     }
+    public boolean agregarContenidoAExpediente(String idPaciente, String tipo, String contenido) {
+    try {
+        if(tipo.equalsIgnoreCase("vacunas") || tipo.equalsIgnoreCase("diagnosticos") || tipo.equalsIgnoreCase("radiografias") || tipo.equalsIgnoreCase("alergias")){
+            String json = String.format("""
+            {
+                "idPaciente": "%s",
+                "tipo": "%s",
+                "contenido": "%s"
+            }
+        """, idPaciente, tipo, contenido);
+            HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url + "/expediente/contenido"))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(json))
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() == 200 || response.statusCode() == 201) {
+            return true;
+        } else {
+            System.err.println("Error al agregar contenido al expediente. Código: " + response.statusCode());
+            System.err.println("Respuesta: " + response.body());
+            return false;
+        }
+        }
+            System.err.println("Tipo no valido");
+            return false;
+        
+        
+
+        
+
+    } catch (IOException | InterruptedException e) {
+        e.printStackTrace();
+        return false;
+    }
+}
 
 }
