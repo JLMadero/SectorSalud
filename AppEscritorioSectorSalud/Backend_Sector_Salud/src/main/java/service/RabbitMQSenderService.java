@@ -27,6 +27,7 @@ public class RabbitMQSenderService {
         // Envío del mensaje a RabbitMQ
         rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE_NAME, RabbitMQConfig.EXPEDIENTE_ROUTING_KEY, mensaje);
     }
+    
     public void enviarAgendarCita(String cedulaProfesional, String pacienteUuid, String nombre, String fecha) {
         String mensaje = String.format(
             "{" +
