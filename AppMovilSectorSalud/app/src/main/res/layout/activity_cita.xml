@@ -7,6 +7,15 @@
     android:orientation="vertical"
     android:padding="16dp">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Solicitar Citas"
+        android:textAlignment="center"
+        android:textSize="42sp"
+        android:textColor="@color/black"
+        />
+
     <EditText
         android:id="@+id/editTextFecha"
         android:layout_width="match_parent"
@@ -20,16 +29,16 @@
         android:padding="12dp"
         android:textSize="16sp" />
 
-    <EditText
-        android:id="@+id/editTextIdDoctor"
+    <Spinner
+        android:id="@+id/spinnerDoctores"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
+        android:prompt="@string/selecciona_doctor"
         android:background="@drawable/edit_text_background"
-        android:hint="ID del Doctor"
-        android:inputType="number"
         android:padding="12dp"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        />
 
     <LinearLayout
         android:layout_width="match_parent"

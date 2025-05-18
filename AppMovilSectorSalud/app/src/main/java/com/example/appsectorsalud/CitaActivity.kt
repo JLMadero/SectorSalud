@@ -2,6 +2,7 @@ package com.example.appsectorsalud
 
 import android.app.DatePickerDialog
 import android.os.Bundle
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
@@ -11,6 +12,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.appsectorsalud.data.MensajeAgendar
+import com.example.appsectorsalud.data.Profesional
 import com.example.appsectorsalud.databinding.ActivityCitaBinding
 import com.example.appsectorsalud.databinding.ActivityExpedienteBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -24,29 +26,63 @@ import java.time.LocalDateTime
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class CitaActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCitaBinding
+    private val listaDoctores = mutableListOf<Profesional>()
+    private lateinit var spinnerAdapter: ArrayAdapter<Profesional>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCitaBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        
+        binding.editTextFecha.setOnClickListener { mostrarDatePicker() }
 
-        // Mostrar DatePicker al hacer clic en el EditText de fecha
-        binding.editTextFecha.setOnClickListener {
-            mostrarDatePicker()
+        spinnerAdapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_item,
+            listaDoctores
+        ).apply {
+            setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            binding.spinnerDoctores.adapter = this
         }
 
-        binding.btnCita.setOnClickListener {
-            enviarCita()
-        }
+        ApiClient.instance.getProfesionales().enqueue(object: Callback<List<Profesional>> {
+            override fun onResponse(
+                call: Call<List<Profesional>>,
+                response: Response<List<Profesional>>
+            ) {
+                if (response.isSuccessful) {
+                    listaDoctores.clear()
+                    listaDoctores.addAll(response.body() ?: emptyList())
+                    spinnerAdapter.notifyDataSetChanged()
+                } else {
+                    Toast.makeText(
+                        this@CitaActivity,
+                        "Error al cargar doctores: ${response.code()}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+            override fun onFailure(call: Call<List<Profesional>>, t: Throwable) {
+                Toast.makeText(
+                    this@CitaActivity,
+                    "Fallo en conexión: ${t.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        })
 
-        binding.btnRegresar.setOnClickListener {
-            finish()
-        }
+        // ④ Botones
+        binding.btnCita.setOnClickListener { enviarCita() }
+        binding.btnRegresar.setOnClickListener { finish() }
     }
+
 
     private fun mostrarDatePicker() {
         val calendar = Calendar.getInstance()
@@ -64,11 +100,16 @@ class CitaActivity : AppCompatActivity() {
 
     private fun enviarCita() {
         val fechaTexto = binding.editTextFecha.text.toString()
-        val idDoctor = binding.editTextIdDoctor.text.toString()
+        val pos = binding.spinnerDoctores.selectedItemPosition
+        if (fechaTexto.isEmpty() || pos < 0) {
+            Toast.makeText(this, "Selecciona fecha y doctor", Toast.LENGTH_SHORT).show()
+            return
+        }
+        val doctor = listaDoctores[pos]
         val uidPaciente = FirebaseAuth.getInstance().currentUser?.uid
         val nombrePaciente = FirebaseAuth.getInstance().currentUser?.displayName ?: "Desconocido"
 
-        if (fechaTexto.isEmpty() || idDoctor.isEmpty() || uidPaciente == null) {
+        if (fechaTexto.isEmpty() || uidPaciente == null) {
             Toast.makeText(this, "Todos los campos son obligatorios", Toast.LENGTH_SHORT).show()
             return
         }
@@ -92,7 +133,7 @@ class CitaActivity : AppCompatActivity() {
         val mensaje = MensajeAgendar(
             idPaciente = uidPaciente,
             nombre = nombrePaciente,
-            idProfesional = idDoctor,
+            idProfesional = doctor.cedula,
             tipo = "AgendarCita", //noti RespuestaSolicitud
             fecha = fechaFormateada,
             jwt = "mi_token_simulado"

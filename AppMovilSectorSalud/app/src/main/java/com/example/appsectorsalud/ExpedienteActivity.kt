@@ -14,6 +14,7 @@ import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.AppCompatButton
+import com.example.appsectorsalud.data.Expediente
 import com.example.appsectorsalud.databinding.ActivityExpedienteBinding
 import com.example.appsectorsalud.utils.RadiografiasAdapter
 import com.google.firebase.auth.FirebaseAuth

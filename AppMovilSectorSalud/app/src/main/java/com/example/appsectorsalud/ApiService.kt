@@ -1,6 +1,8 @@
 package com.example.appsectorsalud
 
+import com.example.appsectorsalud.data.Expediente
 import com.example.appsectorsalud.data.MensajeRespuestaSolicitud
+import com.example.appsectorsalud.data.Profesional
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -17,5 +19,8 @@ interface ApiService {
 
     @GET("api/expedientes/{pacienteId}")
     fun getExpedientePorId(@Path("pacienteId") pacienteId: String): Call<Expediente>
+
+    @GET("api/profesionales")
+    fun getProfesionales(): Call<List<Profesional>>
 
 }

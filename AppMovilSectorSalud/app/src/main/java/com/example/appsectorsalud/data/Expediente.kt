@@ -1,4 +1,4 @@
-package com.example.appsectorsalud
+package com.example.appsectorsalud.data
 
 data class Expediente(
     val fechaCreacion: String,
