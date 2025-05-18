@@ -9,7 +9,6 @@ import javax.swing.table.DefaultTableModel;
 import model.Profesional;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import solicitudes.ApiClient;
 
 /**
  *

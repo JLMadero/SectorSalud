@@ -149,32 +149,25 @@ public boolean eliminarMensaje(Long id) {
     @Override
     public List<PacienteAsignadoDTO> obtenerPacientesAsignados(String cedula) {
         try {
-            // Crear la solicitud HTTP GET
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create("http://localhost:8080/api/pacientes/profesional/" + cedula))
                     .GET()
                     .build();
 
-            // Enviar la solicitud y obtener la respuesta
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-            // Verificar si la respuesta fue exitosa (código 200 OK)
             if (response.statusCode() == 200) {
-                // Deserializar la respuesta JSON a una lista de objetos DTO
                 return mapper.readValue(response.body(), new com.fasterxml.jackson.core.type.TypeReference<List<PacienteAsignadoDTO>>() {
                 });
             } else {
-                // Manejo de error si la respuesta no es exitosa
                 System.err.println("Error al obtener los pacientes asignados. Código de respuesta: " + response.statusCode());
                 return Collections.emptyList();
             }
 
         } catch (IOException e) {
-            // Manejo de excepciones de entrada/salida
             e.printStackTrace();
             return Collections.emptyList();
         } catch (InterruptedException e) {
-            // Manejo de interrupciones de hilo
             e.printStackTrace();
             return Collections.emptyList();
         }
