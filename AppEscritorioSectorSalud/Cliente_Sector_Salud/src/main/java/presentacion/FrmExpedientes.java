@@ -4,11 +4,20 @@ import fachada.Fachada;
 import fachada.IFachada;
 import fachada.MensajeRecibidoDTO;
 import fachada.PacienteAsignadoDTO;
+import java.io.IOException;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.Profesional;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import presentacion.DlgAutenticacionBiometrica;
+import presentacion.FrmAgendaCitas;
+import presentacion.FrmInicioSesion;
+import presentacion.FrmNotificaciones;
+import presentacion.FrmPrincipal;
+import presentacion.FrmVerExpediente;
+import solicitudes.ApiClient;
 
 /**
  *
@@ -23,7 +32,6 @@ import org.json.JSONObject;
 public class FrmExpedientes extends javax.swing.JFrame {
 
     Profesional profesionalSesion;
-    ApiClient apiClient;
     IFachada fachada;
     private List<MensajeRecibidoDTO> mensajes;
     private List<PacienteAsignadoDTO> pacientesAsignados;
@@ -34,14 +42,18 @@ public class FrmExpedientes extends javax.swing.JFrame {
         this.mensajes = mensajes;
         lblNombreDoctor.setText("Dr. " + profesionalSesion.getNombre());
         lblCedulaDoctor.setText("Cédula: " + profesionalSesion.getCedula());
-        apiClient = new ApiClient();
         fachada = new Fachada();
         pacientesAsignados = fachada.obtenerPacientesAsignados(profesionalSesion.getCedula());
         llenarTabla(pacientesAsignados);
     }
     
-    private void llenarTabla(List<PacienteAsignadoDTO> pacientesAsignados){
-        DefaultTableModel modelo = new DefaultTableModel();
+    private void llenarTabla(List<PacienteAsignadoDTO> pacientesAsignados) {
+        DefaultTableModel modelo = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
         modelo.addColumn("ID paciente");
         modelo.addColumn("Nombre paciente");
         
@@ -226,10 +238,20 @@ public class FrmExpedientes extends javax.swing.JFrame {
         btnSolicitar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnSolicitar.setText("Solicitar Expediente");
         btnSolicitar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnSolicitar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSolicitarActionPerformed(evt);
+            }
+        });
 
         btnVer.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnVer.setText("Ver Expediente");
         btnVer.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnVer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVerActionPerformed(evt);
+            }
+        });
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -335,6 +357,70 @@ public class FrmExpedientes extends javax.swing.JFrame {
         inicio.setVisible(true);
         dispose();
     }//GEN-LAST:event_btnCerrarSesionActionPerformed
+
+    private void btnSolicitarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSolicitarActionPerformed
+        if (tablaExpedientes.getSelectedRow() == -1) {
+            JOptionPane.showMessageDialog(null, "Seleccione un paciente", "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        } else {
+            int fila = tablaExpedientes.getSelectedRow();
+            String idPaciente = tablaExpedientes.getValueAt(fila, 0).toString();
+            String nombrePaciente = tablaExpedientes.getValueAt(fila, 1).toString();
+
+            ApiClient apiClient = new ApiClient();
+            boolean enviado = apiClient.solicitarExpediente(profesionalSesion.getCedula(), idPaciente, nombrePaciente);
+
+            if (enviado) {
+                JOptionPane.showMessageDialog(this,
+                        "Solicitud de expediente enviada correctamente para el paciente: " + nombrePaciente,
+                        "Solicitud Enviada", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        "Error al enviar la solicitud: ", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_btnSolicitarActionPerformed
+
+    private void btnVerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerActionPerformed
+        int filaSeleccionada = tablaExpedientes.getSelectedRow();
+
+        if (filaSeleccionada == -1) {
+            JOptionPane.showMessageDialog(this, "Seleccione un paciente", "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        String idPaciente = tablaExpedientes.getValueAt(filaSeleccionada, 0).toString();
+        String nombrePaciente = tablaExpedientes.getValueAt(filaSeleccionada, 1).toString();
+
+        DlgAutenticacionBiometrica dlgAutenticacion = new DlgAutenticacionBiometrica(this, true);
+        dlgAutenticacion.setLocationRelativeTo(this);
+        dlgAutenticacion.setVisible(true);
+
+        if (!dlgAutenticacion.isAutenticado()) {
+            JOptionPane.showMessageDialog(this,
+                    "Autenticación biométrica fallida. No se puede acceder al expediente.",
+                    "Acceso Denegado",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        try {
+            ApiClient apiClient = new ApiClient();
+            //String expedienteJson = apiClient.getExpedientePorId(idPaciente, profesionalSesion.getCedula());
+            String expedienteJson = apiClient.getExpedientePorId("abc12SoIr4DRRA4dmMk8FcDJBvMppOPT23", "234");
+            System.out.println("Contenido de expedienteJson:\n" + expedienteJson);
+            
+            FrmVerExpediente frmVerExpediente = new FrmVerExpediente(expedienteJson, nombrePaciente);
+            frmVerExpediente.setLocationRelativeTo(this);
+            frmVerExpediente.setVisible(true);
+
+        } catch (IOException | InterruptedException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Ocurrió un error al obtener el expediente:\n" + e.getMessage(), "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            
+        }
+    }//GEN-LAST:event_btnVerActionPerformed
      
 //    private void llenarTabla() {
 //        DefaultTableModel modelo = new DefaultTableModel(
