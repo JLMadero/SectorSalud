@@ -29,7 +29,7 @@ class NotificacionesActivity : AppCompatActivity() {
     private lateinit var adapter: NotificacionesAdapter
     private lateinit var refMensajes: DatabaseReference
     private val uid get() = FirebaseAuth.getInstance().currentUser?.uid
-    private val iso8601 = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.getDefault())
+    private val iso8601 = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.getDefault())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
