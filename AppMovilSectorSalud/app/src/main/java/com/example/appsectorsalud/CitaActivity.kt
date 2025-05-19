@@ -16,6 +16,10 @@ import com.example.appsectorsalud.data.Profesional
 import com.example.appsectorsalud.databinding.ActivityCitaBinding
 import com.example.appsectorsalud.databinding.ActivityExpedienteBinding
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -100,6 +104,28 @@ class CitaActivity : AppCompatActivity() {
         datePicker.show()
     }
 
+
+    private fun obtenerNombreCompletoDesdeRealtime(uid: String, callback: (String) -> Unit) {
+        val dbRef = FirebaseDatabase.getInstance().getReference("Usuarios").child(uid)
+        dbRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    val nombres = snapshot.child("nombres").getValue(String::class.java) ?: ""
+                    val paterno = snapshot.child("apellidoPaterno").getValue(String::class.java) ?: ""
+                    val materno = snapshot.child("apellidoMaterno").getValue(String::class.java) ?: ""
+                    val nombreCompleto = "$nombres $paterno $materno".trim()
+                    callback(nombreCompleto.ifBlank { "Desconocido" })
+                } else {
+                    callback("Desconocido")
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                callback("Desconocido")
+            }
+        })
+    }
+
     private fun enviarCita() {
         val fechaTexto = binding.editTextFecha.text.toString()
         val pos = binding.spinnerDoctores.selectedItemPosition
@@ -132,20 +158,23 @@ class CitaActivity : AppCompatActivity() {
 
         val fechaFormateada = formatoSalida.format(fechaDate)
 
-        val mensaje = MensajeAgendar(
-            idPaciente = uidPaciente,
-            nombre = nombrePaciente,
-            idProfesional = doctor.cedula,
-            tipo = "AgendarCita", //noti RespuestaSolicitud
-            fecha = fechaFormateada,
-            jwt = "mi_token_simulado"
-        )
+        obtenerNombreCompletoDesdeRealtime(uidPaciente) { nombrePaciente ->
+            val mensaje = MensajeAgendar(
+                idPaciente = uidPaciente,
+                nombre = nombrePaciente,
+                idProfesional = doctor.cedula,
+                tipo = "AgendarCita",
+                fecha = fechaFormateada,
+                jwt = "mi_token_simulado"
+            )
 
-        CoroutineScope(Dispatchers.Main).launch {
-            val resultado = RabbitMQSender.enviarMensaje(mensaje.toJson())
-            Toast.makeText(this@CitaActivity, if (resultado) "Cita enviada" else "Error al enviar", Toast.LENGTH_SHORT).show()
-            finish()
+            CoroutineScope(Dispatchers.Main).launch {
+                val resultado = RabbitMQSender.enviarMensaje(mensaje.toJson())
+                Toast.makeText(this@CitaActivity, if (resultado) "Cita enviada" else "Error al enviar", Toast.LENGTH_SHORT).show()
+                finish()
+            }
         }
+
     }
 
 }
