@@ -103,7 +103,7 @@ class NotificacionesActivity : AppCompatActivity() {
             val body = PermisoRequest(
                 idPaciente      = uid!!,
                 cedula          = n.cedulaProfesional,
-                fechaDeGeneracion = fechaPermisoFormateada()
+                fechaDeGeneracion = Date()
             )
 
             ApiClient.instance.enviarRespuesta(body).enqueue(object : Callback<PermisoResponse> {
@@ -121,7 +121,7 @@ class NotificacionesActivity : AppCompatActivity() {
                             nombre          = nombreCompleto,
                             idProfesional   = n.cedulaProfesional,
                             respuesta       = true,
-                            fecha_permiso   = fechaVenc,
+                            fecha_permiso   = fechaVenc.toString(),
                             jwt             = "mi_token_simulado"
                         )
 
