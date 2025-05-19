@@ -118,8 +118,8 @@ class NotificacionesActivity : AppCompatActivity() {
 
                         val respuesta = RespuestaSolicitud(
                             idPaciente      = uid!!,
-                            nombrePaciente  = nombreCompleto,
-                            cedula          = n.cedulaProfesional,
+                            nombre          = nombreCompleto,
+                            idProfesional   = n.cedulaProfesional,
                             respuesta       = true,
                             fecha_permiso   = fechaVenc,
                             jwt             = "mi_token_simulado"
@@ -157,8 +157,8 @@ class NotificacionesActivity : AppCompatActivity() {
 
             val respuesta = RespuestaSolicitud(
                 idPaciente       = uid!!,
-                nombrePaciente   = nombreCompleto,
-                cedula    = n.cedulaProfesional,
+                nombre    = nombreCompleto,
+                idProfesional    = n.cedulaProfesional,
                 respuesta        = false,
                 fecha_permiso     = fechaPermisoFormateada(),
                 jwt              = "mi_token_simulado"

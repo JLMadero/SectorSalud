@@ -1,12 +1,11 @@
 package com.example.appsectorsalud.data
 
 import com.google.gson.Gson
-import java.util.Date
 
 data class RespuestaSolicitud(
     val idPaciente: String,
-    val nombrePaciente: String,
-    val cedula: String,
+    val nombre: String,
+    val idProfesional: String,
     val tipo: String = "RespuestaSolicitud",
     val respuesta: Boolean,
     val fecha_permiso: String,
