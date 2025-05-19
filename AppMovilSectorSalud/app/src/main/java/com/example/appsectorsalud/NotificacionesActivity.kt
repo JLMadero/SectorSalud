@@ -103,7 +103,7 @@ class NotificacionesActivity : AppCompatActivity() {
             val body = PermisoRequest(
                 idPaciente      = uid!!,
                 cedula          = n.cedulaProfesional,
-                fechaGeneracion = fechaPermisoFormateada()
+                fechaDeGeneracion = fechaPermisoFormateada()
             )
 
             ApiClient.instance.enviarRespuesta(body).enqueue(object : Callback<PermisoResponse> {
@@ -112,9 +112,9 @@ class NotificacionesActivity : AppCompatActivity() {
                         response: Response<PermisoResponse>
                     ) {
                         val fechaVenc = if (response.isSuccessful)
-                            response.body()?.fechaVencimiento ?: body.fechaGeneracion
+                            response.body()?.fechaVencimiento ?: body.fechaDeGeneracion
                         else
-                            body.fechaGeneracion
+                            body.fechaDeGeneracion
 
                         val respuesta = RespuestaSolicitud(
                             idPaciente      = uid!!,
@@ -149,18 +149,16 @@ class NotificacionesActivity : AppCompatActivity() {
     }
 
     private fun rechazar(n: Notificacion) {
-        if (uid == null) return
-
         refMensajes.child(n.id).updateChildren(mapOf("activo" to false, "respuesta" to "rechazado"))
 
         obtenerNombreCompletoDesdeRealtime(uid!!) { nombreCompleto ->
 
             val respuesta = RespuestaSolicitud(
                 idPaciente       = uid!!,
-                nombre    = nombreCompleto,
+                nombre           = nombreCompleto,
                 idProfesional    = n.cedulaProfesional,
                 respuesta        = false,
-                fecha_permiso     = fechaPermisoFormateada(),
+                fecha_permiso    = fechaPermisoFormateada(),
                 jwt              = "mi_token_simulado"
             )
 
