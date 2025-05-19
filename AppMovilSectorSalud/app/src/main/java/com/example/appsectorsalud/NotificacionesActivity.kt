@@ -1,15 +1,26 @@
 package com.example.appsectorsalud
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.appsectorsalud.data.Notificacion
+import com.example.appsectorsalud.data.PermisoRequest
+import com.example.appsectorsalud.data.PermisoResponse
+import com.example.appsectorsalud.data.RespuestaSolicitud
 import com.example.appsectorsalud.databinding.ActivityNotificacionesBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.util.Date
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class NotificacionesActivity : AppCompatActivity() {
 
@@ -60,18 +71,102 @@ class NotificacionesActivity : AppCompatActivity() {
         b.btnBack.setOnClickListener { finish() }
     }
 
+    private fun obtenerNombreCompletoDesdeRealtime(
+        uid: String,
+        callback: (String) -> Unit
+    ) {
+        FirebaseDatabase.getInstance()
+            .getReference("Usuarios")
+            .child(uid)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val nom = snapshot.child("nombres").getValue(String::class.java).orEmpty()
+                    val pat = snapshot.child("apellidoPaterno").getValue(String::class.java).orEmpty()
+                    val mat = snapshot.child("apellidoMaterno").getValue(String::class.java).orEmpty()
+                    callback("$nom $pat $mat".trim().ifBlank { "Desconocido" })
+                }
+                override fun onCancelled(error: DatabaseError) = callback("Desconocido")
+            })
+    }
+
+    private fun fechaPermisoFormateada(): String {
+        val formato = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
+        return formato.format(Date())
+    }
+
     private fun aceptar(n: Notificacion) {
-        // desactivar y registrar respuesta
-        refMensajes.child(n.id).updateChildren(
-            mapOf("activo" to false, "respuesta" to "aceptado")
-        )
-        Toast.makeText(this, "Acceso concedido", Toast.LENGTH_SHORT).show()
+        refMensajes.child(n.id)
+            .updateChildren(mapOf("activo" to false, "respuesta" to "aceptado"))
+
+        obtenerNombreCompletoDesdeRealtime(uid!!) { nombreCompleto ->
+
+            val body = PermisoRequest(
+                idPaciente      = uid!!,
+                cedula          = n.cedulaProfesional,
+                fechaGeneracion = fechaPermisoFormateada()
+            )
+
+            ApiClient.instance.enviarRespuesta(body).enqueue(object : Callback<PermisoResponse> {
+                    override fun onResponse(
+                        call: Call<PermisoResponse>,
+                        response: Response<PermisoResponse>
+                    ) {
+                        val fechaVenc = if (response.isSuccessful)
+                            response.body()?.fechaVencimiento ?: body.fechaGeneracion
+                        else
+                            body.fechaGeneracion
+
+                        val respuesta = RespuestaSolicitud(
+                            idPaciente      = uid!!,
+                            nombrePaciente  = nombreCompleto,
+                            cedula          = n.cedulaProfesional,
+                            respuesta       = true,
+                            fecha_permiso   = fechaVenc,
+                            jwt             = "mi_token_simulado"
+                        )
+
+                        lifecycleScope.launch(Dispatchers.IO) {
+                            val ok = RabbitMQSender.enviarMensaje(respuesta.toJson())
+                            withContext(Dispatchers.Main) {
+                                Toast.makeText(
+                                    this@NotificacionesActivity,
+                                    if (ok) "Acceso concedido" else "Error al notificar",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
+                    }
+
+                    override fun onFailure(call: Call<PermisoResponse>, t: Throwable) {
+                        Toast.makeText(
+                            this@NotificacionesActivity,
+                            "Error de red: ${t.message}",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                })
+        }
     }
 
     private fun rechazar(n: Notificacion) {
-        refMensajes.child(n.id).updateChildren(
-            mapOf("activo" to false, "respuesta" to "rechazado")
-        )
-        Toast.makeText(this, "Solicitud rechazada", Toast.LENGTH_SHORT).show()
+        if (uid == null) return
+
+        refMensajes.child(n.id).updateChildren(mapOf("activo" to false, "respuesta" to "rechazado"))
+
+        obtenerNombreCompletoDesdeRealtime(uid!!) { nombreCompleto ->
+
+            val respuesta = RespuestaSolicitud(
+                idPaciente       = uid!!,
+                nombrePaciente   = nombreCompleto,
+                cedula    = n.cedulaProfesional,
+                respuesta        = false,
+                fecha_permiso     = fechaPermisoFormateada(),
+                jwt              = "mi_token_simulado"
+            )
+
+            lifecycleScope.launch(Dispatchers.IO) {
+                RabbitMQSender.enviarMensaje(respuesta.toJson())
+            }
+        }
     }
 }
