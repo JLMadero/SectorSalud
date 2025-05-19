@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import repository.MensajeRecibidoRepository;
@@ -50,5 +51,14 @@ public class MensajeController {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @PutMapping("/{id}/visto")
+    public ResponseEntity<Object> marcarComoVisto(@PathVariable Long id) {
+        return mensajeRepo.findById(id).map(mensaje -> {
+            mensaje.setEstado("Visto");
+            mensajeRepo.save(mensaje);
+            return ResponseEntity.ok().build();
+        }).orElse(ResponseEntity.notFound().build());
     }
 }

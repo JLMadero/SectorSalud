@@ -20,5 +20,6 @@ public interface IFachada {
     public boolean enviarMensajeSolicitud(String cedula, String paciente, String nombre);
     public List<PacienteAsignadoDTO> obtenerPacientesAsignados(String cedula);
     public boolean eliminarMensaje(Long id);
+    public void marcarMensajesComoVistos(List<MensajeRecibidoDTO> mensajes);
 
 }

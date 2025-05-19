@@ -48,6 +48,7 @@ import rabbitConfig.RabbitMQConfigListener;
                 mensaje.setPacienteUuid(uuid);
                 mensaje.setTipoMensaje(tipo);
                 mensaje.setNombre(nombre);
+                mensaje.setEstado("Sin Ver");
                 // Procesa el mensaje según el tipo
                 if ("AgendarCita".equals(tipo)) {
                     // Extraer y parsear fecha

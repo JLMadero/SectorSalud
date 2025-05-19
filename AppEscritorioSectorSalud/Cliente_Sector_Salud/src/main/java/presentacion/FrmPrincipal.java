@@ -1,5 +1,7 @@
 package presentacion;
 
+import fachada.Fachada;
+import fachada.IFachada;
 import fachada.MensajeRecibidoDTO;
 import fachada.PacienteAsignadoDTO;
 import java.util.List;
@@ -21,14 +23,17 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
     private Profesional profesionalSesion;
     private List<MensajeRecibidoDTO> mensajes;
+    IFachada fachada;
 
     public FrmPrincipal(Profesional profesionalSesion, List<MensajeRecibidoDTO> mensajes) {
         initComponents();
+        this.fachada = new Fachada();
         this.profesionalSesion = profesionalSesion;
         this.mensajes = mensajes;
 
         lblNombreDoctor.setText("Dr. " + profesionalSesion.getNombre());
         lblCedulaDoctor.setText("Cédula: " + profesionalSesion.getCedula());
+        
 
         if (contarNotificaciones() == 0) {
             lblNotificacionesNuevas.setText("Sin notificaciones nuevas");
@@ -43,6 +48,9 @@ public class FrmPrincipal extends javax.swing.JFrame {
             lblNotificacion1.setText("- " + mensajes.get(mensajes.size() - 2).getTipoMensaje()); // Último mensaje recibido
             lblNotificacion2.setText("- " + mensajes.get(mensajes.size() - 1).getTipoMensaje()); // Penúltimo mensaje recibido
         }
+        if(!mensajes.isEmpty()){
+            fachada.marcarMensajesComoVistos(mensajes);
+        }
     }
     
     public int contarNotificaciones() {
@@ -55,8 +63,10 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
     public void mostrarMensajes() {
         for (MensajeRecibidoDTO mensaje : mensajes) {
+            if(mensaje.getEstado().equalsIgnoreCase("Sin Ver")){
             String textoM = "Paciente: " + mensaje.getNombre() + "\nTipo: " + mensaje.getTipoMensaje();
             JOptionPane.showMessageDialog(this, textoM, "Nueva notificación", JOptionPane.INFORMATION_MESSAGE);
+            }
         }
     }
 

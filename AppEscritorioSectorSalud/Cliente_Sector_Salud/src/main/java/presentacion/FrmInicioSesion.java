@@ -98,6 +98,11 @@ public class FrmInicioSesion extends javax.swing.JFrame {
         panelRound1.setRoundTopRight(20);
 
         txtCedula.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        txtCedula.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCedulaActionPerformed(evt);
+            }
+        });
         txtCedula.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtCedulaKeyTyped(evt);
@@ -199,7 +204,7 @@ public class FrmInicioSesion extends javax.swing.JFrame {
             Profesional profesionalSesion = fachada.obtenerProfesional(cedula);
             
             List<MensajeRecibidoDTO> mensajes = fachada.obtenerMensajesPorCedula(cedula);
-        
+            
             JOptionPane.showMessageDialog(this, "Sesión iniciada correctamente", "Inicio de sesión",
                     JOptionPane.INFORMATION_MESSAGE);
             
@@ -222,6 +227,10 @@ public class FrmInicioSesion extends javax.swing.JFrame {
             return;
         }
     }//GEN-LAST:event_txtCedulaKeyTyped
+
+    private void txtCedulaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCedulaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCedulaActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnIniciarSesion;

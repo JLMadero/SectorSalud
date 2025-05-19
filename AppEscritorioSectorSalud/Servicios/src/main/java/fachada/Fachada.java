@@ -87,29 +87,29 @@ public class Fachada implements IFachada {
     }
 
     @Override
-public boolean eliminarMensaje(Long id) {
-    try {
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8080/api/mensajes/" + id))
-                .DELETE()
-                .build();
+    public boolean eliminarMensaje(Long id) {
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create("http://localhost:8080/api/mensajes/" + id))
+                    .DELETE()
+                    .build();
 
-        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-        // Acepta 200 (OK) o 204 (No Content) como éxito
-        if (response.statusCode() == 200 || response.statusCode() == 204) {
-            return true;
-        } else {
-            System.err.println("Error al eliminar el mensaje. Código de respuesta: " + response.statusCode());
+            // Acepta 200 (OK) o 204 (No Content) como éxito
+            if (response.statusCode() == 200 || response.statusCode() == 204) {
+                return true;
+            } else {
+                System.err.println("Error al eliminar el mensaje. Código de respuesta: " + response.statusCode());
+                return false;
+            }
+
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
             return false;
         }
-
-    } catch (IOException | InterruptedException e) {
-        e.printStackTrace();
-        return false;
     }
-}
-    
+
     @Override
     public boolean enviarMensajeSolicitud(String cedula, String paciente, String nombre) {
         try {
@@ -170,6 +170,32 @@ public boolean eliminarMensaje(Long id) {
         } catch (InterruptedException e) {
             e.printStackTrace();
             return Collections.emptyList();
+        }
+    }
+
+    @Override
+    public void marcarMensajesComoVistos(List<MensajeRecibidoDTO> mensajes) {
+
+        for (MensajeRecibidoDTO mensaje : mensajes) {
+            if(mensaje.getEstado().equalsIgnoreCase("Sin Ver")){
+            Long id = mensaje.getId();
+            try {
+                HttpRequest request = HttpRequest.newBuilder()
+                        .uri(URI.create("http://localhost:8080/api/mensajes/" + id + "/visto"))
+                        .PUT(HttpRequest.BodyPublishers.noBody())
+                        .build();
+
+                HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+                if (response.statusCode() == 200) {
+                    System.out.println("Mensaje con ID " + id + " marcado como visto.");
+                } else {
+                    System.err.println("Error al marcar mensaje ID " + id + ". Código: " + response.statusCode());
+                }
+            } catch (IOException | InterruptedException e) {
+                System.err.println("Excepción al marcar mensaje ID " + id + ": " + e.getMessage());
+            }
+        }
         }
     }
 

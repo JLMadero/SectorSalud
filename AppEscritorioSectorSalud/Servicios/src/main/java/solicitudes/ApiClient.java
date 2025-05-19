@@ -66,7 +66,7 @@ public class ApiClient {
             }
         """, idPaciente, tipo, contenido);
                 HttpRequest request = HttpRequest.newBuilder()
-                        .uri(URI.create(url + "/expediente/contenido"))
+                        .uri(URI.create(url + "/expedientes/actualizar"))
                         .header("Content-Type", "application/json")
                         .POST(HttpRequest.BodyPublishers.ofString(json))
                         .build();

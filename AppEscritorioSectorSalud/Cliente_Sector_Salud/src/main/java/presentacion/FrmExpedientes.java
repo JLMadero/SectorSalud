@@ -21,8 +21,9 @@ import solicitudes.ApiClient;
 
 /**
  *
- * Clase que extiende de Java swing para representar graficamente los expedientes de pacientes
- * 
+ * Clase que extiende de Java swing para representar graficamente los
+ * expedientes de pacientes
+ *
  * @author Alejandro Gómez Vega 247313
  * @author Jesus Francisco Tapia Maldonado 245136
  * @author Jose Luis Madero Lopez 244903
@@ -35,7 +36,7 @@ public class FrmExpedientes extends javax.swing.JFrame {
     IFachada fachada;
     private List<MensajeRecibidoDTO> mensajes;
     private List<PacienteAsignadoDTO> pacientesAsignados;
-    
+
     public FrmExpedientes(Profesional profesionalSesion, List<MensajeRecibidoDTO> mensajes) {
         initComponents();
         this.profesionalSesion = profesionalSesion;
@@ -46,7 +47,7 @@ public class FrmExpedientes extends javax.swing.JFrame {
         pacientesAsignados = fachada.obtenerPacientesAsignados(profesionalSesion.getCedula());
         llenarTabla(pacientesAsignados);
     }
-    
+
     private void llenarTabla(List<PacienteAsignadoDTO> pacientesAsignados) {
         DefaultTableModel modelo = new DefaultTableModel() {
             @Override
@@ -56,7 +57,7 @@ public class FrmExpedientes extends javax.swing.JFrame {
         };
         modelo.addColumn("ID paciente");
         modelo.addColumn("Nombre paciente");
-        
+
         for (PacienteAsignadoDTO pacientesAsignado : pacientesAsignados) {
             String idPaciente = pacientesAsignado.getPacienteUuid();
             String nombrePaciente = pacientesAsignado.getNombre();
@@ -64,7 +65,7 @@ public class FrmExpedientes extends javax.swing.JFrame {
         }
         tablaExpedientes.setModel(modelo);
     }
- 
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -368,7 +369,7 @@ public class FrmExpedientes extends javax.swing.JFrame {
             String nombrePaciente = tablaExpedientes.getValueAt(fila, 1).toString();
 
             ApiClient apiClient = new ApiClient();
-            boolean enviado = apiClient.solicitarExpediente(profesionalSesion.getCedula(), idPaciente, nombrePaciente);
+            boolean enviado = fachada.enviarMensajeSolicitud(profesionalSesion.getCedula(), idPaciente, nombrePaciente);
 
             if (enviado) {
                 JOptionPane.showMessageDialog(this,
@@ -389,39 +390,48 @@ public class FrmExpedientes extends javax.swing.JFrame {
                     JOptionPane.ERROR_MESSAGE);
             return;
         }
-        String idPaciente = tablaExpedientes.getValueAt(filaSeleccionada, 0).toString();
-        String nombrePaciente = tablaExpedientes.getValueAt(filaSeleccionada, 1).toString();
-
-        DlgAutenticacionBiometrica dlgAutenticacion = new DlgAutenticacionBiometrica(this, true);
-        dlgAutenticacion.setLocationRelativeTo(this);
-        dlgAutenticacion.setVisible(true);
-
-        if (!dlgAutenticacion.isAutenticado()) {
-            JOptionPane.showMessageDialog(this,
-                    "Autenticación biométrica fallida. No se puede acceder al expediente.",
-                    "Acceso Denegado",
-                    JOptionPane.WARNING_MESSAGE);
-            return;
-        }
+         int fila = tablaExpedientes.getSelectedRow();
+            String idPaciente = tablaExpedientes.getValueAt(fila, 0).toString();
+            String nombrePaciente = tablaExpedientes.getValueAt(filaSeleccionada, 1).toString();
 
         try {
             ApiClient apiClient = new ApiClient();
             //String expedienteJson = apiClient.getExpedientePorId(idPaciente, profesionalSesion.getCedula());
-            String expedienteJson = apiClient.getExpedientePorId("abc12SoIr4DRRA4dmMk8FcDJBvMppOPT23", "234");
+            String expedienteJson = apiClient.getExpedientePorId(idPaciente, profesionalSesion.getCedula());
             System.out.println("Contenido de expedienteJson:\n" + expedienteJson);
-            
-            FrmVerExpediente frmVerExpediente = new FrmVerExpediente(expedienteJson, nombrePaciente);
+            if(!expedienteJson.isBlank()){
+            DlgAutenticacionBiometrica dlgAutenticacion = new DlgAutenticacionBiometrica(this, true);
+            dlgAutenticacion.setLocationRelativeTo(null);
+            dlgAutenticacion.setVisible(true);
+
+            if (!dlgAutenticacion.isAutenticado()) {
+                JOptionPane.showMessageDialog(this,
+                        "Autenticación biométrica fallida. No se puede acceder al expediente.",
+                        "Acceso Denegado",
+                        JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            this.dispose();
+            FrmVerExpediente frmVerExpediente = new FrmVerExpediente(expedienteJson, nombrePaciente, idPaciente,profesionalSesion, mensajes);
             frmVerExpediente.setLocationRelativeTo(this);
             frmVerExpediente.setVisible(true);
-
+            }else{
+                JOptionPane.showMessageDialog(this,
+                        "No se puede acceder al expediente.",
+                        "Acceso Denegado",
+                        JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            
         } catch (IOException | InterruptedException e) {
             JOptionPane.showMessageDialog(this,
                     "Ocurrió un error al obtener el expediente:\n" + e.getMessage(), "Error",
                     JOptionPane.ERROR_MESSAGE);
-            
+
         }
     }//GEN-LAST:event_btnVerActionPerformed
-     
+
 //    private void llenarTabla() {
 //        DefaultTableModel modelo = new DefaultTableModel(
 //                new Object[][]{},

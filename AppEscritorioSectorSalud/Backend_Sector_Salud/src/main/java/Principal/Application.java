@@ -34,11 +34,11 @@ public class Application {
     public CommandLineRunner demo(RabbitMQSenderService senderService) {
         return (args) -> {
             // Enviar un mensaje directamente desde el main para probar
-            senderService.enviarSolicitudExpediente("247313", "SoIr4DRRA4dmMk8FcDJBvMppOPT2", "Gomez");
-            System.out.println("Mensaje enviado a la cola Cliente/Servidor");
+//            senderService.enviarSolicitudExpediente("247313", "SoIr4DRRA4dmMk8FcDJBvMppOPT2", "Gomez");
+//            System.out.println("Mensaje enviado a la cola Cliente/Servidor");
             
-            senderService.enviarRespuestaSolicitud("123456", "abcd-1234", "Ficticio", true, "2025-05-14 00:00");
-            senderService.enviarAgendarCita("235633", "abcd-1234", "Ficticius", "2025-05-17 09:00");
+//            senderService.enviarRespuestaSolicitud("123456", "abcd-1234", "Ficticio", true, "2025-05-14 00:00");
+            senderService.enviarAgendarCita("235633", "V2fDWB1zSeMunfkwI4MeSS3PESk1", "Jesus Tapía", "2025-10-17 09:00");
 //            //formato fecha 2000-00-00 00:00
 //            senderService.enviarRespuestaSolicitud("235633", "abcd-1234", "Ficticio", true, "2025-05-14 00:00");
         };

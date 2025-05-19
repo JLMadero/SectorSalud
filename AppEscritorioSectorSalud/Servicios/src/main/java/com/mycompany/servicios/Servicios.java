@@ -29,24 +29,24 @@ import solicitudes.ApiClient;
 //            System.out.println(mensaje);
 //        }
 //        
-//        ApiClient cliente = new ApiClient();
-//        String expediente = cliente.getExpedientePorId("V2fDWB1zSeMunfkwI4MeSS3PESk1", "asdas");
-//        if(expediente.isBlank()){
-//            System.out.println("No tienes permiso");
-//        }else{
-//            System.out.println(expediente);
-//        }
+        ApiClient cliente = new ApiClient();
+        String expediente = cliente.getExpedientePorId("V2fDWB1zSeMunfkwI4MeSS3PESk1", "234");
+        if(expediente.isBlank()){
+            System.out.println("No tienes permiso");
+        }else{
+            System.out.println(expediente);
+        }
 //        if(f.enviarMensajeSolicitud("244903", "12345", "Dr. Madero")){
 //            System.out.println("Se envio");
 //        }else{
 //            System.out.println("No se envio");
 //        }
 
-          if(f.eliminarMensaje(7L)){
-              System.out.println("Eliminado");
-          }else{
-              System.out.println("No se elimino");
-          }
+//          if(f.eliminarMensaje(7L)){
+//              System.out.println("Eliminado");
+//          }else{
+//              System.out.println("No se elimino");
+//          }
         }
         
         

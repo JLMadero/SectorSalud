@@ -36,6 +36,17 @@ public class MensajeRecibido {
     private Date fechaPermiso;
     
     private boolean respuesta;
+    
+    private String estado;
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+    
 
     public Long getId() {
         return id;
