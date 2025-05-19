@@ -29,6 +29,7 @@ class NotificacionesActivity : AppCompatActivity() {
     private lateinit var adapter: NotificacionesAdapter
     private lateinit var refMensajes: DatabaseReference
     private val uid get() = FirebaseAuth.getInstance().currentUser?.uid
+    private val iso8601 = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.getDefault())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -103,7 +104,7 @@ class NotificacionesActivity : AppCompatActivity() {
             val body = PermisoRequest(
                 idPaciente      = uid!!,
                 cedula          = n.cedulaProfesional,
-                fechaDeGeneracion = Date()
+                fechaDeGeneracion = iso8601.format(Date())
             )
 
             ApiClient.instance.enviarRespuesta(body).enqueue(object : Callback<PermisoResponse> {
@@ -121,7 +122,7 @@ class NotificacionesActivity : AppCompatActivity() {
                             nombre          = nombreCompleto,
                             idProfesional   = n.cedulaProfesional,
                             respuesta       = true,
-                            fecha_permiso   = fechaVenc.toString(),
+                            fecha_permiso   = fechaVenc,
                             jwt             = "mi_token_simulado"
                         )
 
