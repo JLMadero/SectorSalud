@@ -102,7 +102,7 @@ class NotificacionesActivity : AppCompatActivity() {
 
             val body = PermisoRequest(
                 idPaciente      = uid!!,
-                cedula          = n.cedulaProfesional,
+                idDoctor          = n.cedulaProfesional,
             )
 
             ApiClient.instance.enviarRespuesta(body).enqueue(object : Callback<PermisoResponse> {
