@@ -29,7 +29,6 @@ class NotificacionesActivity : AppCompatActivity() {
     private lateinit var adapter: NotificacionesAdapter
     private lateinit var refMensajes: DatabaseReference
     private val uid get() = FirebaseAuth.getInstance().currentUser?.uid
-    private val iso8601 = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.getDefault())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -104,7 +103,6 @@ class NotificacionesActivity : AppCompatActivity() {
             val body = PermisoRequest(
                 idPaciente      = uid!!,
                 cedula          = n.cedulaProfesional,
-                fechaDeGeneracion = iso8601.format(Date())
             )
 
             ApiClient.instance.enviarRespuesta(body).enqueue(object : Callback<PermisoResponse> {
@@ -113,9 +111,9 @@ class NotificacionesActivity : AppCompatActivity() {
                         response: Response<PermisoResponse>
                     ) {
                         val fechaVenc = if (response.isSuccessful)
-                            response.body()?.fechaVencimiento ?: body.fechaDeGeneracion
+                            response.body()?.fechaVencimiento ?: fechaPermisoFormateada()
                         else
-                            body.fechaDeGeneracion
+                            fechaPermisoFormateada()
 
                         val respuesta = RespuestaSolicitud(
                             idPaciente      = uid!!,
