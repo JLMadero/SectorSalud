@@ -31,7 +31,6 @@ class ExpedienteActivity : AppCompatActivity() {
     private lateinit var diagnosticosList: RecyclerView
     private lateinit var vacunasList: RecyclerView
     private lateinit var notasList: RecyclerView
-    private val pacienteId = "12347"
 
     // Define the ActivityResultLauncher to handle the result from CitaActivity
     private lateinit var citaActivityResultLauncher: ActivityResultLauncher<Intent>

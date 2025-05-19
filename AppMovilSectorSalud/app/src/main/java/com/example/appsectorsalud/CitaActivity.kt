@@ -95,6 +95,8 @@ class CitaActivity : AppCompatActivity() {
             binding.editTextFecha.setText(fechaSeleccionada)
         }, year, month, day)
 
+        datePicker.datePicker.minDate = calendar.timeInMillis
+
         datePicker.show()
     }
 
@@ -115,7 +117,7 @@ class CitaActivity : AppCompatActivity() {
         }
 
         val formatoEntrada = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-        val formatoSalida = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val formatoSalida = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
 
         val fechaDate: Date? = try {
             formatoEntrada.parse(fechaTexto)
@@ -142,6 +144,7 @@ class CitaActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.Main).launch {
             val resultado = RabbitMQSender.enviarMensaje(mensaje.toJson())
             Toast.makeText(this@CitaActivity, if (resultado) "Cita enviada" else "Error al enviar", Toast.LENGTH_SHORT).show()
+            finish()
         }
     }
 
