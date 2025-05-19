@@ -4,6 +4,10 @@ import fachada.Fachada;
 import fachada.IFachada;
 import fachada.MensajeRecibidoDTO;
 import fachada.PacienteAsignadoDTO;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
 import model.Profesional;
@@ -27,6 +31,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
     public FrmPrincipal(Profesional profesionalSesion, List<MensajeRecibidoDTO> mensajes) {
         initComponents();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        
         this.fachada = new Fachada();
         this.profesionalSesion = profesionalSesion;
         this.mensajes = mensajes;
@@ -51,12 +57,36 @@ public class FrmPrincipal extends javax.swing.JFrame {
         if(!mensajes.isEmpty()){
             fachada.marcarMensajesComoVistos(mensajes);
         }
+        if(contarNotificacionesCitas() == 0){
+            lblCantPacientes.setText("Sin notificaciones");
+            lblProximaCita.setText("");
+            lblPacienteProximo.setText("");
+        }else if(contarNotificacionesCitas() == 1){
+            lblCantPacientes.setText("1 Paciente");
+            lblProximaCita.setText(formatter.format(mensajes.get(0).getFechaCita()));
+            lblPacienteProximo.setText("Paciente: "+ mensajes.get(0).getNombre());
+        }
+//        else{
+//            lblNotificacionesNuevas.setText(contarNotificacionesCitas() + " nuevas");
+//            lblNotificacion1.setText("- " + formatter.format(mensajes.get(mensajes.size() - 2).getTipoMensaje())); // Último mensaje recibido
+//            lblNotificacion2.setText("- " + mensajes.get(mensajes.size() - 1).getNombre()); // Penúltimo mensaje recibido
+//        }
     }
     
     public int contarNotificaciones() {
         int cantidadN = 0;
         for (MensajeRecibidoDTO mensaje : mensajes) {
             cantidadN += 1;
+        }
+        return cantidadN;
+    }
+    public int contarNotificacionesCitas() {
+        int cantidadN = 0;
+        for (MensajeRecibidoDTO mensaje : mensajes) {
+            if(mensaje.getTipoMensaje().equalsIgnoreCase("AgendarCita")){
+               cantidadN += 1; 
+            }
+            
         }
         return cantidadN;
     }
@@ -69,6 +99,65 @@ public class FrmPrincipal extends javax.swing.JFrame {
             }
         }
     }
+//    public void mostrarMensajes() {
+//    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+//    String textoM;
+//
+//    for (MensajeRecibidoDTO mensaje : mensajes) {
+//        if (mensaje.getEstado().equalsIgnoreCase("Sin Ver")) {
+//            textoM = ""; // Reiniciar el mensaje por cada iteración
+//
+//            if (mensaje.getTipoMensaje().equalsIgnoreCase("AgendarCita")) {
+//                // Asegurarse de que la fecha no sea null
+//                if (mensaje.getFechaCita() != null) {
+//                    // Restar 1 día a la fecha de la cita
+//                    Calendar calendar = Calendar.getInstance();
+//                    calendar.setTime(mensaje.getFechaCita());
+//                    calendar.add(Calendar.DAY_OF_MONTH, -1);
+//                    Date fechaModificada = calendar.getTime();
+//
+//                    // Formatear fechas por separado
+//                    String fechaCitaFormateada = formatter.format(mensaje.getFechaCita());
+//                    String fechaLimiteFormateada = formatter.format(fechaModificada);
+//
+//                    textoM = "Paciente: " + mensaje.getNombre()
+//                           + "\nTipo: " + mensaje.getTipoMensaje()
+//                           + "\nFecha de la cita: " + fechaCitaFormateada
+//                           + "\n!!!! Tienes hasta el día: " + fechaLimiteFormateada + " para solicitar el expediente del paciente !!!!";
+//                } else {
+//                    textoM = "Error: La fecha de la cita no está disponible para el paciente " + mensaje.getNombre();
+//                }
+//
+//            } else if (mensaje.getTipoMensaje().equalsIgnoreCase("RespuestaSolicitud")) {
+//                if (mensaje.isRespuesta()) {
+//                    if (mensaje.getFechaPermiso() != null) {
+//                        String fechaPermisoFormateada = formatter.format(mensaje.getFechaPermiso());
+//
+//                        textoM = "!!! Solicitud de Expediente ACEPTADA !!!"
+//                               + "\nPaciente: " + mensaje.getNombre()
+//                               + "\nTipo: " + mensaje.getTipoMensaje()
+//                               + "\nTienes solo hasta esta fecha para ver el expediente: " + fechaPermisoFormateada;
+//                    } else {
+//                        textoM = "!!! Solicitud de Expediente ACEPTADA !!!"
+//                               + "\nPaciente: " + mensaje.getNombre()
+//                               + "\nTipo: " + mensaje.getTipoMensaje()
+//                               + "\n(No se recibió la fecha límite para ver el expediente)";
+//                    }
+//                } else {
+//                    textoM = "!!! Solicitud de Expediente DENEGADA !!!"
+//                           + "\nPaciente: " + mensaje.getNombre()
+//                           + "\nTipo: " + mensaje.getTipoMensaje()
+//                           + "\nSolicítalo de nuevo.";
+//                }
+//            }
+//
+//            // Mostrar el mensaje solo si se construyó textoM
+//            if (!textoM.isEmpty()) {
+//                JOptionPane.showMessageDialog(this, textoM, "Nueva notificación", JOptionPane.INFORMATION_MESSAGE);
+//            }
+//        }
+//    }
+//}
 
 //    public FrmPrincipal(Profesional profesionalSesion) {
 //        initComponents();

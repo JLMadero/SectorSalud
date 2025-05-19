@@ -30,7 +30,7 @@ import solicitudes.ApiClient;
 //        }
 //        
         ApiClient cliente = new ApiClient();
-        String expediente = cliente.getExpedientePorId("V2fDWB1zSeMunfkwI4MeSS3PESk1", "234");
+        String expediente = cliente.getExpedientePorId("SP0LD7iOzNfNY804ZKLs6VA2vmh2", "244903");
         if(expediente.isBlank()){
             System.out.println("No tienes permiso");
         }else{
