@@ -1,0 +1,1 @@
+Proyecto de citas medicas distribuido comunicado atreves de RabbitMQ, y trabajando con distintas bases de datos y entornos, una Aplicación móvil hecha en Kotlin con Android Studio, agarrando los datos de una api programada en Java y hosteada en Vercel, una Aplicación de Escritorio programada en Java con un sistema de cliente servidor para recoger la información.
